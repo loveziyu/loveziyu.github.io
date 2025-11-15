@@ -1,93 +1,209 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
+<!doctype html>
+<html lang="zh">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>瑜瑜的照片 🌏</title>
-<style>
-body {
-  margin:0;
-  height:200vh; /* make page scrollable */
-  background: linear-gradient(#ffd6e9, #ffe9f3);
-  font-family:"Microsoft YaHei";
-  overflow-x:hidden;
-}
-
-h1 {
-  position: fixed;
-  top: 20px;
-  width:100%;
-  text-align:center;
-  font-size:36px;
-  color:#ff4b8b;
-  z-index:10;
-}
-
-/* Scene & Sphere */
-.scene {
-  position: fixed;
-  top:50%;
-  left:50%;
-  width:400px;
-  height:400px;
-  transform-style: preserve-3d;
-  transform: translate(-50%, -50%) scale(1);
-  transition: transform 0.2s;
-}
-
-.scene img {
-  position:absolute;
-  width:80px;
-  height:80px;
-  object-fit:cover;
-  border-radius:10px;
-  border:2px solid #ff9fc7;
-  box-shadow:0 5px 15px rgba(255,121,175,0.5);
-  transition: transform 0.2s;
-}
-</style>
+  <meta charset="utf-8" />
+  <title>Three.js 球形照片墙</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    html,body { height:100%; margin:0; background:#111; color:#fff; font-family: sans-serif;}
+    #container { width:100%; height:100vh; overflow:hidden; position:relative; }
+    .hint {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      background: rgba(0,0,0,0.4);
+      padding:8px 10px;
+      border-radius:6px;
+      font-size:13px;
+    }
+  </style>
 </head>
 <body>
+  <div id="container">
+    <div class="hint">拖拽旋转 · 滚轮缩放 · 点击图片可放大 (示例)</div>
+  </div>
 
-<h1>瑜瑜的照片 🌏</h1>
-<div class="scene" id="sphere"></div>
+  <!-- Three.js from CDN -->
+  <script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.158.0/build/three.module.js';
+    import { OrbitControls } from 'https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js';
 
-<script>
-const photos = [
-  '1761885326952.jpg','1761885492079.jpg','1761885580077.jpg',
-  '1761885634304.jpg','mmexport1755532277585.jpg','mmexport1759643324343.jpg',
-  'mmexport1759643400112.jpg','mmexport1762657315556.jpg','mmexport1763200275486.jpg',
-  'mmexport1763200316221.jpg','mmexport1763200346550.jpg','mmexport1763200404166.jpg'
-];
+    const container = document.getElementById('container');
 
-const sphere = document.getElementById('sphere');
-const radius = 150;
-const total = photos.length;
+    // 替换为你自己的图片URL数组（建议至少 12 张）
+    const images = [
+      'https://picsum.photos/seed/1/400/400',
+      'https://picsum.photos/seed/2/400/400',
+      'https://picsum.photos/seed/3/400/400',
+      'https://picsum.photos/seed/4/400/400',
+      'https://picsum.photos/seed/5/400/400',
+      'https://picsum.photos/seed/6/400/400',
+      'https://picsum.photos/seed/7/400/400',
+      'https://picsum.photos/seed/8/400/400',
+      'https://picsum.photos/seed/9/400/400',
+      'https://picsum.photos/seed/10/400/400',
+      'https://picsum.photos/seed/11/400/400',
+      'https://picsum.photos/seed/12/400/400'
+    ];
 
-// Generate sphere (Fibonacci distribution)
-for(let i=0;i<total;i++){
-  const img = document.createElement('img');
-  img.src = photos[i];
+    // 基本场景/相机/渲染器
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 2000);
+    camera.position.set(0, 0, 800);
 
-  const phi = Math.acos(1 - 2*(i+0.5)/total);
-  const theta = Math.PI * (1 + Math.sqrt(5)) * (i+0.5);
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio ? window.devicePixelRatio : 1);
+    container.appendChild(renderer.domElement);
 
-  const x = radius * Math.sin(phi) * Math.cos(theta);
-  const y = radius * Math.cos(phi);
-  const z = radius * Math.sin(phi) * Math.sin(theta);
+    // 控制器
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 300;
+    controls.maxDistance = 2000;
 
-  img.style.transform = `translate3d(${x}px, ${y}px, ${z}px)`;
-  sphere.appendChild(img);
-}
+    // 环境光
+    scene.add(new THREE.AmbientLight(0xffffff, 0.9));
 
-// Scroll to scale sphere
-window.addEventListener('scroll', ()=>{
-  const scrollTop = window.scrollY;
-  // scale sphere between 1 and 2
-  const scale = 1 + scrollTop / 500;
-  sphere.style.transform = `translate(-50%, -50%) scale(${scale})`;
-});
-</script>
+    // 用于放大被点击图片的平面（淡入淡出）
+    let popupMesh = null;
 
+    // 把图片放在球面上
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const loader = new THREE.TextureLoader();
+    const imgCount = images.length;
+    const radius = 420; // 球面半径
+    const planeSize = 140; // 每张图片的大小（可根据图片比例调整）
+
+    // 均匀分布在球面上的经典方法：使用经纬网或 Fibonacci 球分布
+    function fibonacciSpherePoints(n, r) {
+      const points = [];
+      const golden = Math.PI * (3 - Math.sqrt(5));
+      for (let i = 0; i < n; i++) {
+        const y = 1 - (i / (n - 1)) * 2; // y 从 1 到 -1
+        const radiusAtY = Math.sqrt(1 - y * y);
+        const theta = golden * i;
+        const x = Math.cos(theta) * radiusAtY;
+        const z = Math.sin(theta) * radiusAtY;
+        points.push(new THREE.Vector3(x * r, y * r, z * r));
+      }
+      return points;
+    }
+
+    const points = fibonacciSpherePoints(imgCount, radius);
+
+    images.forEach((src, i) => {
+      loader.load(src,
+        (texture) => {
+          // 保持图片宽高比
+          const aspect = texture.image.width / texture.image.height;
+          const h = planeSize;
+          const w = planeSize * aspect;
+
+          const geo = new THREE.PlaneGeometry(w, h);
+          const mat = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+          const mesh = new THREE.Mesh(geo, mat);
+
+          // 设置位置并面向球心
+          const p = points[i];
+          mesh.position.copy(p);
+
+          // 让图片面向球体外侧：朝向摄像机的反方向（面向球心的相反方向）
+          const lookAt = new THREE.Vector3().copy(p).multiplyScalar(2); // 远点
+          mesh.lookAt(new THREE.Vector3(0,0,0)); // 先朝向球心
+          mesh.rotateY(Math.PI); // 翻转，使图面朝外
+
+          // 设置名字或自定义数据，便于点击识别
+          mesh.userData = { src };
+
+          group.add(mesh);
+        },
+        undefined,
+        (err) => { console.warn('Texture load error', err); }
+      );
+    });
+
+    // 射线用于检测点击
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    function onClick(event) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(group.children, false);
+      if (intersects.length > 0) {
+        const mesh = intersects[0].object;
+        openPopup(mesh.userData.src);
+      }
+    }
+    renderer.domElement.addEventListener('click', onClick);
+
+    // 点击图片后在场景中显示一个更大的平面（放大）
+    function openPopup(src) {
+      // 移除旧的
+      if (popupMesh) {
+        scene.remove(popupMesh);
+        popupMesh.geometry.dispose();
+        popupMesh.material.map?.dispose();
+        popupMesh.material.dispose();
+        popupMesh = null;
+      }
+      const popupSize = Math.min(window.innerWidth * 0.6, window.innerHeight * 0.6);
+      const tex = loader.load(src, () => renderer.render(scene, camera));
+      const aspect = tex.image ? (tex.image.width / tex.image.height) : 1;
+      const ph = popupSize;
+      const pw = popupSize * aspect;
+      const geo = new THREE.PlaneGeometry(pw, ph);
+      const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide });
+      popupMesh = new THREE.Mesh(geo, mat);
+      popupMesh.position.set(0, 0, camera.position.z - 200);
+      scene.add(popupMesh);
+
+      // 点击放大图即可移除
+      popupMesh.cursor = 'pointer';
+      const removeFn = () => {
+        if (popupMesh) {
+          scene.remove(popupMesh);
+          popupMesh.geometry.dispose();
+          popupMesh.material.map?.dispose();
+          popupMesh.material.dispose();
+          popupMesh = null;
+        }
+        window.removeEventListener('click', removeFn);
+      };
+      // 用一次性监听器：下一次点击任意地方移除弹出图
+      setTimeout(() => window.addEventListener('click', removeFn, { once: true }), 50);
+    }
+
+    // 自动慢速旋转
+    let lastTime = performance.now();
+    function animate() {
+      requestAnimationFrame(animate);
+      const now = performance.now();
+      const delta = (now - lastTime) / 1000;
+      lastTime = now;
+
+      // 轻微自转
+      group.rotation.y += 0.05 * delta;
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // 窗口自适应
+    window.addEventListener('resize', () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+
+  </script>
 </body>
 </html>
