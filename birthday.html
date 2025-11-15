@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日惊喜 🎂</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Microsoft YaHei", sans-serif;
+            background: linear-gradient(#ffd6e9, #ffe9f3);
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #ff4b8b;
+            margin-top: 40px;
+        }
+
+        p {
+            font-size: 20px;
+            color: #ff4b8b;
+            margin: 20px 30px;
+            line-height: 1.8;
+        }
+
+        .cake-box {
+            width: 250px;
+            height: 250px;
+            margin: 20px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 4px solid #ff9fc7;
+            box-shadow: 0px 0px 20px rgba(255, 121, 175, 0.7);
+        }
+
+        .cake-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .back-button {
+            margin-top: 30px;
+            padding: 12px 25px;
+            background-color: #ff4b8b;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+        }
+
+        .back-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
+        }
+
+        /* Falling petals */
+        .petal {
+            position: fixed;
+            top: -10px;
+            width: 15px;
+            height: 15px;
+            background: pink;
+            border-radius: 50%;
+            animation: fall linear infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(120vh) rotate(360deg); }
+        }
+
+        /* Floating hearts */
+        .heart {
+            position: fixed;
+            bottom: -10px;
+            color: #ff4b8b;
+            font-size: 18px;
+            animation: floatUp 5s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-120vh) scale(1.8); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>生日快乐 🎂 瑜瑜</h1>
+
+    <div class="cake-box">
+        <img src="https://via.placeholder.com/250?text=Birthday+Cake" alt="生日蛋糕">
+    </div>
+
+    <p>
+        亲爱的瑜瑜，<br>
+        祝你生日快乐！🎉<br>
+        愿你永远开心、健康、美丽，每一天都像今天一样被幸福包围。<br>
+        谢谢你出现在我的生命里，让每一天都充满甜蜜和温暖。<br><br>
+        ❤️ 5 December，是属于你的特别日子 ❤️
+    </p>
+
+    <button class="back-button" onclick="window.location.href='index.html'">🏠 返回主页</button>
+
+    <script>
+        // Petal generator
+        function createPetal() {
+            const petal = document.createElement("div");
+            petal.classList.add("petal");
+            document.body.appendChild(petal);
+
+            const size = Math.random() * 12 + 8;
+            petal.style.width = `${size}px`;
+            petal.style.height = `${size}px`;
+            petal.style.left = `${Math.random() * 100}vw`;
+            petal.style.animationDuration = `${Math.random() * 5 + 5}s`;
+
+            setTimeout(() => petal.remove(), 10000);
+        }
+
+        // Heart generator
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = "❤";
+            heart.style.left = `${Math.random() * 100}vw`;
+            heart.style.fontSize = `${Math.random() * 15 + 15}px`;
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 6000);
+        }
+
+        setInterval(createPetal, 300);
+        setInterval(createHeart, 700);
+    </script>
+
+</body>
+</html>
