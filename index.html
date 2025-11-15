@@ -80,6 +80,36 @@
             0% { transform: translateY(0) scale(1); opacity: 1; }
             100% { transform: translateY(-120vh) scale(1.8); opacity: 0; }
         }
+
+        /* Link containers */
+        .link-containers {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 15px;
+        }
+
+        .container {
+            width: 150px;
+            height: 80px;
+            background-color: #ffb6c1;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -101,6 +131,16 @@
         希望我的出现，让你的世界多一点安心，多一点快乐。<br><br>
         ❤️ 瑜瑜，你值得被全世界温柔以待 ❤️
     </p>
+
+    <!-- 6 clickable containers -->
+    <div class="link-containers">
+        <div class="container" onclick="window.location.href='page1.html'">💌 页面1</div>
+        <div class="container" onclick="window.location.href='page2.html'">💖 页面2</div>
+        <div class="container" onclick="window.location.href='page3.html'">🌸 页面3</div>
+        <div class="container" onclick="window.location.href='page4.html'">✨ 页面4</div>
+        <div class="container" onclick="window.location.href='page5.html'">🌷 页面5</div>
+        <div class="container" onclick="window.location.href='page6.html'">🎀 页面6</div>
+    </div>
 
     <script>
         // Live relationship timer
