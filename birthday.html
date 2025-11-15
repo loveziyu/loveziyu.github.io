@@ -1,147 +1,142 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生日惊喜 🎂</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "Microsoft YaHei", sans-serif;
-            background: linear-gradient(#ffd6e9, #ffe9f3);
-            text-align: center;
-            overflow-x: hidden;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>生日惊喜 🎂</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: "Microsoft YaHei", sans-serif;
+        background: linear-gradient(#ffd6e9, #ffe9f3);
+        text-align: center;
+        overflow-x: hidden;
+    }
 
-        h1 {
-            font-size: 36px;
-            color: #ff4b8b;
-            margin-top: 40px;
-        }
+    h1 {
+        font-size: 2.5rem;
+        color: #ff4b8b;
+        margin-top: 40px;
+        text-shadow: 1px 1px 5px rgba(255, 75, 139, 0.5);
+    }
 
-        p {
-            font-size: 20px;
-            color: #ff4b8b;
-            margin: 20px 30px;
-            line-height: 1.8;
-        }
+    .password-box {
+        margin-top: 50px;
+    }
 
-        .cake-box {
-            width: 250px;
-            height: 250px;
-            margin: 20px auto;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 4px solid #ff9fc7;
-            box-shadow: 0px 0px 20px rgba(255, 121, 175, 0.7);
-        }
+    input[type="password"] {
+        padding: 10px 15px;
+        font-size: 18px;
+        border-radius: 10px;
+        border: 2px solid #ff9fc7;
+        outline: none;
+    }
 
-        .cake-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    button {
+        padding: 10px 20px;
+        font-size: 18px;
+        border-radius: 10px;
+        border: none;
+        background-color: #ff4b8b;
+        color: white;
+        cursor: pointer;
+        margin-left: 10px;
+        box-shadow: 0 5px 15px rgba(255,105,180,0.4);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
 
-        .back-button {
-            margin-top: 30px;
-            padding: 12px 25px;
-            background-color: #ff4b8b;
-            color: white;
-            font-size: 18px;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
-        }
+    button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(255,105,180,0.5);
+    }
 
-        .back-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
-        }
+    .hidden { display: none; }
 
-        /* Falling petals */
-        .petal {
-            position: fixed;
-            top: -10px;
-            width: 15px;
-            height: 15px;
-            background: pink;
-            border-radius: 50%;
-            animation: fall linear infinite;
-            opacity: 0.8;
-        }
+    .cake-box {
+        width: 250px;
+        height: 250px;
+        margin: 20px auto;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 4px solid #ff9fc7;
+        box-shadow: 0px 0px 20px rgba(255, 121, 175, 0.7);
+        transition: transform 0.3s;
+    }
 
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(120vh) rotate(360deg); }
-        }
+    .cake-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-        /* Floating hearts */
-        .heart {
-            position: fixed;
-            bottom: -10px;
-            color: #ff4b8b;
-            font-size: 18px;
-            animation: floatUp 5s linear infinite;
-        }
+    /* Flying wishes */
+    .wish {
+        position: fixed;
+        font-size: 18px;
+        color: #ff4b8b;
+        animation: fly 6s linear forwards;
+        pointer-events: none;
+        white-space: nowrap;
+    }
 
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-120vh) scale(1.8); opacity: 0; }
-        }
-    </style>
+    @keyframes fly {
+        0% { transform: translateY(100vh) translateX(0) scale(1); opacity: 1; }
+        100% { transform: translateY(-50vh) translateX(50px) scale(1.5); opacity: 0; }
+    }
+</style>
 </head>
 <body>
 
-    <h1>生日快乐 🎂 瑜瑜</h1>
+<h1>生日惊喜 🎂</h1>
 
+<div class="password-box">
+    <input type="password" id="birthdayPass" placeholder="请输入密码">
+    <button onclick="checkPassword()">确认</button>
+</div>
+
+<div id="birthdayContent" class="hidden">
     <div class="cake-box">
-        <img src="https://via.placeholder.com/250?text=Birthday+Cake" alt="生日蛋糕">
+        <img src="https://via.placeholder.com/250?text=生日蛋糕" alt="生日蛋糕">
     </div>
+    <button onclick="window.location.href='index.html'">🏠 返回主页</button>
+</div>
 
-    <p>
-        亲爱的瑜瑜，<br>
-        祝你生日快乐！🎉<br>
-        愿你永远开心、健康、美丽，每一天都像今天一样被幸福包围。<br>
-        谢谢你出现在我的生命里，让每一天都充满甜蜜和温暖。<br><br>
-        ❤️ 5 December，是属于你的特别日子 ❤️
-    </p>
+<script>
+    const correctPassword = "yuyu123"; // 设定密码
+    const wishes = [
+        "生日快乐！🎉",
+        "愿你永远开心、健康、美丽！💖",
+        "今天是你的特别日子！🌸",
+        "谢谢你出现在我的生命里！❤️",
+        "愿你的每一天都充满甜蜜和温暖！🍬",
+        "祝你笑口常开，幸福常伴！✨",
+        "爱你的每一天都值得纪念！💞"
+    ];
 
-    <button class="back-button" onclick="window.location.href='index.html'">🏠 返回主页</button>
-
-    <script>
-        // Petal generator
-        function createPetal() {
-            const petal = document.createElement("div");
-            petal.classList.add("petal");
-            document.body.appendChild(petal);
-
-            const size = Math.random() * 12 + 8;
-            petal.style.width = `${size}px`;
-            petal.style.height = `${size}px`;
-            petal.style.left = `${Math.random() * 100}vw`;
-            petal.style.animationDuration = `${Math.random() * 5 + 5}s`;
-
-            setTimeout(() => petal.remove(), 10000);
+    function checkPassword() {
+        const input = document.getElementById("birthdayPass").value;
+        if (input === correctPassword) {
+            document.querySelector(".password-box").classList.add("hidden");
+            document.getElementById("birthdayContent").classList.remove("hidden");
+            startWishes();
+        } else {
+            alert("密码错误哦，请再试一次！");
         }
+    }
 
-        // Heart generator
-        function createHeart() {
-            const heart = document.createElement("div");
-            heart.classList.add("heart");
-            heart.innerHTML = "❤";
-            heart.style.left = `${Math.random() * 100}vw`;
-            heart.style.fontSize = `${Math.random() * 15 + 15}px`;
-            document.body.appendChild(heart);
-
-            setTimeout(() => heart.remove(), 6000);
-        }
-
-        setInterval(createPetal, 300);
-        setInterval(createHeart, 700);
-    </script>
+    function startWishes() {
+        setInterval(() => {
+            const wish = document.createElement("div");
+            wish.classList.add("wish");
+            wish.innerText = wishes[Math.floor(Math.random() * wishes.length)];
+            wish.style.left = Math.random() * 80 + "vw";
+            wish.style.fontSize = Math.random() * 12 + 16 + "px";
+            document.body.appendChild(wish);
+            setTimeout(() => wish.remove(), 6000);
+        }, 800);
+    }
+</script>
 
 </body>
 </html>
