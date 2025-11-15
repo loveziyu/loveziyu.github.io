@@ -7,64 +7,50 @@
 <style>
 body {
   margin:0;
+  height:200vh; /* make page scrollable */
+  background: linear-gradient(#ffd6e9, #ffe9f3);
   font-family:"Microsoft YaHei";
-  background: linear-gradient(#ffd6e9,#ffe9f3);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  overflow:hidden;
+  overflow-x:hidden;
 }
+
 h1 {
-  position:absolute;
-  top:20px;
+  position: fixed;
+  top: 20px;
   width:100%;
   text-align:center;
   font-size:36px;
   color:#ff4b8b;
+  z-index:10;
 }
 
-/* Globe container */
+/* Scene & Sphere */
 .scene {
+  position: fixed;
+  top:50%;
+  left:50%;
   width:400px;
   height:400px;
-  perspective: 1000px;
-  position: relative;
-}
-.sphere {
-  width:100%;
-  height:100%;
-  position:absolute;
   transform-style: preserve-3d;
-  animation: rotate 20s linear infinite;
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 0.2s;
 }
-.sphere img {
+
+.scene img {
   position:absolute;
   width:80px;
   height:80px;
   object-fit:cover;
   border-radius:10px;
   border:2px solid #ff9fc7;
-  box-shadow: 0 5px 15px rgba(255,121,175,0.5);
-  transition: transform 0.3s;
-}
-.sphere img:hover {
-  transform: scale(1.2);
-}
-
-/* Rotate animation */
-@keyframes rotate {
-  from { transform: rotateY(0deg) rotateX(15deg); }
-  to { transform: rotateY(360deg) rotateX(15deg); }
+  box-shadow:0 5px 15px rgba(255,121,175,0.5);
+  transition: transform 0.2s;
 }
 </style>
 </head>
 <body>
 
 <h1>瑜瑜的照片 🌏</h1>
-<div class="scene">
-  <div class="sphere" id="sphere"></div>
-</div>
+<div class="scene" id="sphere"></div>
 
 <script>
 const photos = [
@@ -78,10 +64,11 @@ const sphere = document.getElementById('sphere');
 const radius = 150;
 const total = photos.length;
 
-// Fibonacci sphere distribution (for even 3D layout)
+// Generate sphere (Fibonacci distribution)
 for(let i=0;i<total;i++){
   const img = document.createElement('img');
   img.src = photos[i];
+
   const phi = Math.acos(1 - 2*(i+0.5)/total);
   const theta = Math.PI * (1 + Math.sqrt(5)) * (i+0.5);
 
@@ -92,6 +79,15 @@ for(let i=0;i<total;i++){
   img.style.transform = `translate3d(${x}px, ${y}px, ${z}px)`;
   sphere.appendChild(img);
 }
+
+// Scroll to scale sphere
+window.addEventListener('scroll', ()=>{
+  const scrollTop = window.scrollY;
+  // scale sphere between 1 and 2
+  const scale = 1 + scrollTop / 500;
+  sphere.style.transform = `translate(-50%, -50%) scale(${scale})`;
+});
 </script>
+
 </body>
 </html>
