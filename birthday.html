@@ -5,138 +5,154 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>生日惊喜 🎂</title>
 <style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: "Microsoft YaHei", sans-serif;
-        background: linear-gradient(#ffd6e9, #ffe9f3);
-        text-align: center;
-        overflow: hidden;
-    }
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Microsoft YaHei", sans-serif;
+    background: linear-gradient(#ffd6e9, #ffe9f3);
+    text-align: center;
+    overflow: hidden;
+}
 
-    h1 {
-        font-size: 2.5rem;
-        color: #ff4b8b;
-        margin-top: 40px;
-        text-shadow: 1px 1px 5px rgba(255, 75, 139, 0.5);
-    }
+h1 {
+    font-size: 2rem;
+    color: #ff4b8b;
+    margin-top: 40px;
+    text-shadow: 1px 1px 5px rgba(255, 75, 139, 0.5);
+}
 
-    .password-box {
-        margin-top: 50px;
-    }
+.password-box {
+    margin-top: 50px;
+}
 
-    input[type="password"] {
-        padding: 10px 15px;
-        font-size: 18px;
-        border-radius: 10px;
-        border: 2px solid #ff9fc7;
-        outline: none;
-    }
+input[type="password"] {
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 2px solid #ff9fc7;
+    outline: none;
+}
 
-    button {
-        padding: 10px 20px;
-        font-size: 18px;
-        border-radius: 10px;
-        border: none;
-        background-color: #ff4b8b;
-        color: white;
-        cursor: pointer;
-        margin-left: 10px;
-        box-shadow: 0 5px 15px rgba(255,105,180,0.4);
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    background-color: #ff4b8b;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+    box-shadow: 0 5px 15px rgba(255,105,180,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
 
-    button:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(255,105,180,0.5);
-    }
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255,105,180,0.5);
+}
 
-    .hidden { display: none; }
+.hidden { display: none; }
 
-    .countdown {
-        font-size: 5rem;
-        color: #ff4b8b;
-        margin-top: 50px;
-    }
+.countdown {
+    font-size: 4rem;
+    color: #ff4b8b;
+    margin-top: 50px;
+}
 
-    .cake-container {
-        position: relative;
-        width: 250px;
-        height: 200px;
-        margin: 20px auto;
-        border-radius: 20px 20px 10px 10px;
-        background: #ff9fc7;
-        box-shadow: 0 5px 20px rgba(255,105,180,0.5);
-    }
+.cake-container {
+    position: relative;
+    width: 180px; /* smaller cake */
+    height: 150px;
+    margin: 20px auto;
+}
 
-    .candles {
-        position: absolute;
-        top: -40px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-    }
+.cake-layer {
+    width: 100%;
+    height: 50px;
+    border-radius: 20px 20px 10px 10px;
+    background: #ff9fc7;
+    box-shadow: 0 5px 15px rgba(255,105,180,0.4);
+    margin-bottom: 5px;
+}
 
-    .candle {
-        width: 10px;
-        height: 40px;
-        background: #fff176;
-        border-radius: 3px;
-        position: relative;
-    }
+.cake-layer:nth-child(2) {
+    background: #ffb6c1;
+    height: 45px;
+}
 
-    .flame {
-        position: absolute;
-        top: -20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 12px;
-        height: 20px;
-        background: radial-gradient(circle, #ffeb3b 0%, #f44336 70%);
-        border-radius: 50%;
-        animation: flicker 0.3s infinite alternate;
-    }
+.cake-layer:nth-child(3) {
+    background: #ffc1d1;
+    height: 40px;
+}
 
-    @keyframes flicker {
-        0% { transform: translateX(-50%) scale(1); opacity: 1; }
-        100% { transform: translateX(-50%) scale(1.2); opacity: 0.8; }
-    }
+.candles {
+    position: absolute;
+    top: -30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
 
-    /* Flying wishes */
-    .wish {
-        position: fixed;
-        font-size: 18px;
-        color: #ff4b8b;
-        animation: fly 6s linear forwards;
-        pointer-events: none;
-        white-space: nowrap;
-    }
+.candle {
+    width: 8px;
+    height: 30px;
+    background: #fff176;
+    border-radius: 2px;
+    position: relative;
+}
 
-    @keyframes fly {
-        0% { transform: translateY(100vh) translateX(0) scale(1); opacity: 1; }
-        100% { transform: translateY(-50vh) translateX(50px) scale(1.5); opacity: 0; }
-    }
+.flame {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 15px;
+    background: radial-gradient(circle, #ffeb3b 0%, #f44336 70%);
+    border-radius: 50%;
+    animation: flicker 0.3s infinite alternate;
+}
+
+@keyframes flicker {
+    0% { transform: translateX(-50%) scale(1); opacity: 1; }
+    100% { transform: translateX(-50%) scale(1.2); opacity: 0.8; }
+}
+
+/* Flying wishes */
+.wish {
+    position: fixed;
+    font-size: 16px;
+    color: #ff4b8b;
+    animation: fly 6s linear forwards;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+@keyframes fly {
+    0% { transform: translateY(100vh) translateX(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-50vh) translateX(50px) scale(1.5); opacity: 0; }
+}
 </style>
 </head>
 <body>
 
 <h1>生日惊喜 🎂</h1>
 
-<!-- Password input -->
 <div class="password-box" id="passwordBox">
     <input type="password" id="birthdayPass" placeholder="请输入密码">
     <button onclick="checkPassword()">确认</button>
 </div>
 
-<!-- Countdown -->
 <div id="countdownBox" class="hidden">
     <div class="countdown" id="countdownNumber">5</div>
 </div>
 
-<!-- Cake -->
 <div id="cakeBox" class="hidden">
-    <div class="cake-container">
+    <div class="cake-container" id="cakeContainer">
+        <div class="cake-layer"></div>
+        <div class="cake-layer"></div>
+        <div class="cake-layer"></div>
         <div class="candles" id="candles"></div>
     </div>
     <p>闭上眼睛，许个愿吧 ✨</p>
@@ -144,7 +160,7 @@
 </div>
 
 <script>
-const correctPassword = "yuyu123"; // 设置密码
+const correctPassword = "yuyu123"; 
 const wishes = [
     "生日快乐！🎉",
     "愿你永远开心、健康、美丽！💖",
@@ -165,7 +181,6 @@ function checkPassword() {
     }
 }
 
-// Countdown 5..4..3..2..1
 function startCountdown() {
     const countdownBox = document.getElementById("countdownBox");
     const countdownNumber = document.getElementById("countdownNumber");
@@ -182,7 +197,6 @@ function startCountdown() {
     }, 1000);
 }
 
-// Show cake with candles
 function showCake() {
     const cakeBox = document.getElementById("cakeBox");
     cakeBox.classList.remove("hidden");
@@ -197,18 +211,15 @@ function showCake() {
         candles.appendChild(candle);
     }
 
-    // 10秒许愿
     setTimeout(() => {
         document.getElementById("blowButton").classList.remove("hidden");
-    }, 10000);
+    }, 10000); 
 }
 
-// Blow candles -> wishes
 function blowCandles() {
     document.getElementById("blowButton").classList.add("hidden");
-    document.getElementById("candles").innerHTML = ""; // remove flames
+    document.getElementById("candles").innerHTML = ""; 
 
-    // Show animated wishes
     setInterval(() => {
         const wish = document.createElement("div");
         wish.classList.add("wish");
