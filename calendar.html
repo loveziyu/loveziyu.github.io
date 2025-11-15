@@ -1,1 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日历 📅</title>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #ffe6f0, #fff0f5);
+    text-align: center;
+}
+
+h1 {
+    margin-top: 30px;
+    color: #ff4b8b;
+    font-size: 2rem;
+    text-shadow: 1px 1px 3px rgba(255, 75, 139, 0.5);
+}
+
+.calendar {
+    width: 90%;
+    max-width: 500px;
+    margin: 20px auto;
+    background: #fff0f5;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+    padding: 20px;
+}
+
+.month-year {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.month-year button {
+    background-color: #ff4b8b;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.month-year button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(255,105,180,0.5);
+}
+
+.month-year span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff4b8b;
+}
+
+.weekdays, .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.weekdays div {
+    font-weight: bold;
+    color: #ff4b8b;
+}
+
+.days div {
+    background: #ffe6f0;
+    padding: 10px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.days div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(255,105,180,0.4);
+}
+
+.days .today {
+    background: #ff4b8b;
+    color: white;
+    font-weight: bold;
+}
+
+.days .birthday::after {
+    content: "🎂";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 16px;
+}
+
+.days .period::after {
+    content: "💗";
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 16px;
+}
+</style>
+</head>
+<body>
+
+<h1>日历 📅</h1>
+
+<div class="calendar">
+    <div class="month-year">
+        <button id="prevMonth">⬅</button>
+        <span id="monthYear"></span>
+        <button id="nextMonth">➡</button>
+    </div>
+    <div class="weekdays">
+        <div>日</div>
+        <div>一</div>
+        <div>二</div>
+        <div>三</div>
+        <div>四</div>
+        <div>五</div>
+        <div>六</div>
+    </div>
+    <div class="days" id="days"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/lunar-javascript/dist/lunar.min.js"></script>
+<script>
+// Birthday: 农历12月初二
+function getBirthday(year){
+    const lunar = Lunar.fromYmd(year,12,2);
+    const solar = lunar.getSolar();
+    return {month: solar.getMonth() - 1, day: solar.getDay()};
+}
+
+// Period estimation based on last period (6 Nov 2025 - 10 Nov 2025), 28-day cycle
+function getPeriods(year){
+    const periods = [];
+    const lastStart = new Date(2025, 10, 6); // 6 Nov 2025
+    const cycle = 28;
+    const duration = 5;
+    let start = new Date(lastStart);
+
+    while(start.getFullYear() <= year){
+        for(let i=0;i<duration;i++){
+            let d = new Date(start);
+            d.setDate(d.getDate() + i);
+            if(d.getFullYear() === year) periods.push(d);
+        }
+        start.setDate(start.getDate() + cycle);
+    }
+    return periods;
+}
+
+const monthNames = ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
+let today = new Date();
+let currentMonth = today.getMonth();
+let currentYear = today.getFullYear();
+
+const monthYear = document.getElementById("monthYear");
+const daysContainer = document.getElementById("days");
+
+function renderCalendar(month, year){
+    monthYear.textContent = `${monthNames[month]} ${year}`;
+    daysContainer.innerHTML = '';
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month+1, 0).getDate();
+
+    const birthday = getBirthday(year);
+    const periods = getPeriods(year);
+
+    for(let i=0;i<firstDay;i++){
+        daysContainer.appendChild(document.createElement("div"));
+    }
+
+    for(let day=1; day<=daysInMonth; day++){
+        const dayDiv = document.createElement("div");
+        dayDiv.textContent = day;
+        const dateObj = new Date(year, month, day);
+
+        if(day === today.getDate() && month === today.getMonth() && year === today.getFullYear()){
+            dayDiv.classList.add("today");
+        }
+
+        // Birthday
+        if(day === birthday.day && month === birthday.month){
+            dayDiv.classList.add("birthday");
+        }
+
+        // Periods
+        periods.forEach(d=>{
+            if(d.getDate() === day && d.getMonth() === month && d.getFullYear() === year){
+                dayDiv.classList.add("period");
+            }
+        });
+
+        dayDiv.onclick = ()=>alert(`你点击了 ${year}-${month+1}-${day}`);
+        daysContainer.appendChild(dayDiv);
+    }
+}
+
+document.getElementById("prevMonth").onclick = ()=>{
+    currentMonth--;
+    if(currentMonth<0){currentMonth=11;currentYear--;}
+    renderCalendar(currentMonth,currentYear);
+}
+
+document.getElementById("nextMonth").onclick = ()=>{
+    currentMonth++;
+    if(currentMonth>11){currentMonth=0;currentYear++;}
+    renderCalendar(currentMonth,currentYear);
+}
+
+renderCalendar(currentMonth,currentYear);
+</script>
+</body>
+</html>
 
