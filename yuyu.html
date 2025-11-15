@@ -1,66 +1,63 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CSS 3D 球形照片墙</title>
-  <style>
-    html, body {
-      margin: 0;
-      height: 100%;
-      background: #111;
-      color: #fff;
-      font-family: sans-serif;
-      overflow: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSS 3D Sphere Photo Wall</title>
+<style>
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #111;
+    overflow: hidden;
+    font-family: sans-serif;
+  }
 
-    .hint {
-      position: absolute;
-      left: 12px;
-      top: 12px;
-      background: rgba(0,0,0,0.4);
-      padding: 8px 10px;
-      border-radius: 6px;
-      font-size: 13px;
-      z-index: 100;
-    }
+  .hint {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    background: rgba(0,0,0,0.4);
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    z-index: 100;
+    color: #fff;
+  }
 
-    .scene {
-      width: 100vw;
-      height: 100vh;
-      perspective: 1200px;
-      overflow: visible;
-      position: relative;
-    }
+  .scene {
+    width: 100vw;
+    height: 100vh;
+    perspective: 1200px;
+    overflow: visible;
+    position: relative;
+  }
 
-    .sphere {
-      width: 0;
-      height: 0;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform-style: preserve-3d;
-      transform: rotateX(0deg) rotateY(0deg) scale(1);
-      transition: transform 0.1s linear;
-    }
+  .sphere {
+    width: 0;
+    height: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-style: preserve-3d;
+  }
 
-    .sphere img {
-      position: absolute;
-      width: 120px;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
+  .sphere img {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
 
-    /* Clicked image zoom */
-    .sphere img.active {
-      transform: translate3d(-50%, -50%, 300px) scale(3);
-      z-index: 999;
-      box-shadow: 0 0 20px rgba(255,255,255,0.8);
-    }
-  </style>
+  .sphere img.active {
+    transform: translate3d(-50%, -50%, 300px) scale(3);
+    z-index: 999;
+    box-shadow: 0 0 20px rgba(255,255,255,0.8);
+  }
+</style>
 </head>
 <body>
 
@@ -68,7 +65,7 @@
 
 <div class="scene">
   <div class="sphere" id="sphere">
-    <!-- 图片 -->
+    <!-- 替换为你自己的图片 -->
     <img src="https://threejs.org/examples/textures/uv_grid_opengl.jpg">
     <img src="https://threejs.org/examples/textures/flower-1.jpg">
     <img src="https://threejs.org/examples/textures/flower-2.jpg">
@@ -89,12 +86,12 @@ const sphere = document.getElementById('sphere');
 const images = sphere.querySelectorAll('img');
 const radius = 250; // 球半径
 
-// === 1. 放置图片到球面 ===
-function fibonacciSpherePoints(n, r) {
+// === 1. 均匀放置图片在球面 ===
+function fibonacciSphere(n, r) {
   const points = [];
   const golden = Math.PI * (3 - Math.sqrt(5));
   for (let i = 0; i < n; i++) {
-    const y = 1 - (i / (n - 1)) * 2; // -1 -> 1
+    const y = 1 - (i / (n - 1)) * 2; // -1 到 1
     const radiusAtY = Math.sqrt(1 - y * y);
     const theta = golden * i;
     const x = Math.cos(theta) * radiusAtY;
@@ -104,37 +101,36 @@ function fibonacciSpherePoints(n, r) {
   return points;
 }
 
-const points = fibonacciSpherePoints(images.length, radius);
+const points = fibonacciSphere(images.length, radius);
 images.forEach((img, i) => {
   const p = points[i];
+  img.dataset.x = p.x;
+  img.dataset.y = p.y;
+  img.dataset.z = p.z;
   img.style.transform = `translate3d(${p.x}px, ${p.y}px, ${p.z}px)`;
 });
 
 // === 2. 拖拽旋转 ===
 let rotX = 0, rotY = 0;
-let lastX, lastY, isDragging = false;
+let lastX, lastY, dragging = false;
 
 document.addEventListener('mousedown', e => {
-  isDragging = true;
+  dragging = true;
   lastX = e.clientX;
   lastY = e.clientY;
 });
-document.addEventListener('mouseup', e => isDragging = false);
+document.addEventListener('mouseup', e => dragging = false);
 document.addEventListener('mousemove', e => {
-  if(!isDragging) return;
+  if(!dragging) return;
   const dx = e.clientX - lastX;
   const dy = e.clientY - lastY;
-  rotY += dx * 0.5;
-  rotX -= dy * 0.5;
-  rotX = Math.max(Math.min(rotX, 90), -90); // 限制上下旋转角度
+  rotY += dx * 0.3;
+  rotX -= dy * 0.3;
+  rotX = Math.max(Math.min(rotX, 90), -90);
   updateSphere();
   lastX = e.clientX;
   lastY = e.clientY;
 });
-
-function updateSphere(scale=1) {
-  sphere.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(${scale})`;
-}
 
 // === 3. 鼠标滚轮缩放 ===
 let scale = 1;
@@ -142,30 +138,41 @@ document.addEventListener('wheel', e => {
   e.preventDefault();
   scale += e.deltaY * -0.001;
   scale = Math.min(Math.max(0.5, scale), 2);
-  updateSphere(scale);
+  updateSphere();
 });
 
 // === 4. 点击图片放大 ===
 images.forEach(img => {
   img.addEventListener('click', e => {
-    images.forEach(i => i.classList.remove('active')); // 先移除所有
+    images.forEach(i => i.classList.remove('active'));
     if(!img.classList.contains('active')) img.classList.add('active');
     e.stopPropagation();
   });
 });
+document.addEventListener('click', () => images.forEach(i => i.classList.remove('active')));
 
-// 点击空白区域取消放大
-document.addEventListener('click', () => {
-  images.forEach(i => i.classList.remove('active'));
-});
+// === 5. 更新球体和让图片始终面向摄像机 ===
+function updateSphere() {
+  const radX = rotX * Math.PI / 180;
+  const radY = rotY * Math.PI / 180;
+  images.forEach(img => {
+    const x0 = parseFloat(img.dataset.x);
+    const y0 = parseFloat(img.dataset.y);
+    const z0 = parseFloat(img.dataset.z);
 
-// === 5. 自动缓慢旋转 ===
-function animate() {
-  rotY += 0.1; // 自动旋转
-  updateSphere(scale);
-  requestAnimationFrame(animate);
+    // 旋转球坐标
+    let x1 = x0 * Math.cos(radY) - z0 * Math.sin(radY);
+    let z1 = x0 * Math.sin(radY) + z0 * Math.cos(radY);
+    let y1 = y0 * Math.cos(radX) - z1 * Math.sin(radX);
+    let z2 = y0 * Math.sin(radX) + z1 * Math.cos(radX);
+
+    // 图片面向摄像机
+    img.style.transform = `translate3d(${x1}px, ${y1}px, ${z2}px) rotateY(${-rotY}deg) rotateX(${rotX}deg) scale(${scale})`;
+  });
 }
-animate();
+
+// 初始渲染
+updateSphere();
 </script>
 
 </body>
