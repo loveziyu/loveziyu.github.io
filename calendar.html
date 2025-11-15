@@ -37,21 +37,21 @@
   <div class="days" id="days"></div>
 </div>
 
+<!-- 引入 calendar.js -->
 <script src="https://cdn.jsdelivr.net/npm/js-calendar-converter@0.0.7/dist/calendar.min.js"></script>
 <script>
-  const calendar = window.calendar; // 从 calendar.js 引入的对象
+  const calendar = window.calendar; // 来自 js‑calendar-converter :contentReference[oaicite:0]{index=0}
 
-  // Yuyu 的农历生日：农历 12 月初二 (lunar month = 12, lunar day = 2)
+  // Yuyu 农历生日：农历 12 月初二
   function getBirthday(year) {
-    const solar = calendar.lunar2solar(year, 12, 2, false);
-    // solar 返回对象，例如 {cYear, cMonth, cDay, …}
-    return { month: solar.cMonth - 1, day: solar.cDay };
+    const sol = calendar.lunar2solar(year, 12, 2, false);
+    return { month: sol.cMonth - 1, day: sol.cDay };
   }
 
-  // 阴经期估算：已知上次姨妈 2025-11-06 到 2025-11-10，28 天周期，持续 5 天
+  // 预测姨妈期：基于上次 2025-11-06，28天周期，5天持续
   function getPeriods(year) {
     const periods = [];
-    const lastStart = new Date(2025, 10, 6); // 11月是 month=10
+    const lastStart = new Date(2025, 10, 6); // JS 的月份从 0 开始：10 = Nov
     const cycle = 28;
     const duration = 5;
     let start = new Date(lastStart);
@@ -61,7 +61,7 @@
         const d = new Date(start);
         d.setDate(d.getDate() + i);
         if (d.getFullYear() === year) {
-          periods.push(d);
+          periods.push(new Date(d));
         }
       }
       start.setDate(start.getDate() + cycle);
@@ -87,35 +87,40 @@
     const birthday = getBirthday(year);
     const periods = getPeriods(year);
 
-    // 空白格
+    // 空白格子
     for (let i = 0; i < firstDay; i++) {
-      daysContainer.appendChild(document.createElement("div"));
+      const empty = document.createElement("div");
+      daysContainer.appendChild(empty);
     }
 
+    // 每天
     for (let d = 1; d <= daysInMonth; d++) {
       const dayDiv = document.createElement("div");
       dayDiv.textContent = d;
-      const thisDate = new Date(year, month, d);
+
+      const dateObj = new Date(year, month, d);
 
       // 今天
-      if (d === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+      if (dateObj.getFullYear() === today.getFullYear() &&
+          dateObj.getMonth() === today.getMonth() &&
+          dateObj.getDate() === today.getDate()) {
         dayDiv.classList.add("today");
       }
 
-      // 生日 (农历)
+      // 生日
       if (d === birthday.day && month === birthday.month) {
         dayDiv.classList.add("birthday");
       }
 
-      // 预测姨妈期
+      // 预测姨妈
       periods.forEach(p => {
-        if (p.getDate() === d && p.getMonth() === month && p.getFullYear() === year) {
+        if (p.getFullYear() === year && p.getMonth() === month && p.getDate() === d) {
           dayDiv.classList.add("period");
         }
       });
 
       dayDiv.onclick = () => {
-        alert(`你点击了 ${year}-${month+1}-${d}`);
+        alert(`你点击了 ${year}-${month + 1}-${d}`);
       };
 
       daysContainer.appendChild(dayDiv);
@@ -130,7 +135,6 @@
     }
     renderCalendar(currentMonth, currentYear);
   };
-
   document.getElementById("nextMonth").onclick = () => {
     currentMonth++;
     if (currentMonth > 11) {
@@ -141,7 +145,6 @@
   };
 
   renderCalendar(currentMonth, currentYear);
-
 </script>
 
 </body>
