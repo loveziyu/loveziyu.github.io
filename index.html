@@ -1,194 +1,150 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>给我最可爱的瑜瑜</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: "Microsoft YaHei", sans-serif;
-            background: linear-gradient(#ffd6e9, #ffe9f3);
-            text-align: center;
-            overflow-x: hidden;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>瑜瑜的照片 📸</title>
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Microsoft YaHei", sans-serif;
+    background: linear-gradient(#ffd6e9, #ffe9f3);
+    text-align: center;
+    overflow-x: hidden;
+}
 
-        h1 {
-            font-size: 36px;
-            color: #ff4b8b;
-            margin-top: 40px;
-        }
+h1 {
+    font-size: 36px;
+    color: #ff4b8b;
+    margin-top: 40px;
+}
 
-        .days-box {
-            margin-top: 10px;
-            font-size: 22px;
-            font-weight: bold;
-            color: #ff4b8b;
-        }
+/* Gallery Grid */
+.photo-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    width: 90%;
+    max-width: 1000px;
+    margin: 30px auto;
+}
 
-        p {
-            font-size: 18px;
-            color: #ff6fa5;
-            padding: 0 20px;
-            line-height: 1.8;
-        }
+.photo-box img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 15px;
+    border: 3px solid #ff9fc7;
+    box-shadow: 0 5px 15px rgba(255, 121, 175, 0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
 
-        .photo-box {
-            width: 250px;
-            height: 250px;
-            margin: 20px auto;
-            border-radius: 15px;
-            overflow: hidden;
-            border: 4px solid #ff9fc7;
-            box-shadow: 0px 0px 15px rgba(255, 121, 175, 0.7);
-        }
+.photo-box img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(255, 105, 180, 0.7);
+}
 
-        .photo-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+/* Back Button */
+.back-button {
+    margin-top: 30px;
+    padding: 12px 25px;
+    background-color: #ff4b8b;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+}
 
-        /* Falling petals */
-        .petal {
-            position: fixed;
-            top: -10px;
-            width: 15px;
-            height: 15px;
-            background: pink;
-            border-radius: 50%;
-            animation: fall linear infinite;
-            opacity: 0.8;
-        }
+.back-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
+}
 
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(120vh) rotate(360deg); }
-        }
+/* Falling petals */
+.petal {
+    position: fixed;
+    top: -10px;
+    width: 15px;
+    height: 15px;
+    background: pink;
+    border-radius: 50%;
+    animation: fall linear infinite;
+    opacity: 0.8;
+}
 
-        /* Floating hearts */
-        .heart {
-            position: fixed;
-            bottom: -10px;
-            color: #ff4b8b;
-            font-size: 18px;
-            animation: floatUp 5s linear infinite;
-        }
+@keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(120vh) rotate(360deg); }
+}
 
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-120vh) scale(1.8); opacity: 0; }
-        }
+/* Floating hearts */
+.heart {
+    position: fixed;
+    bottom: -10px;
+    color: #ff4b8b;
+    font-size: 18px;
+    animation: floatUp 5s linear infinite;
+}
 
-        /* Link containers */
-        .link-containers {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 30px 0;
-            gap: 15px;
-        }
-
-        .container {
-            width: 160px;
-            height: 80px;
-            background-color: #ffb6c1;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
-        }
-
-        .container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
-        }
-    </style>
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-120vh) scale(1.8); opacity: 0; }
+}
+</style>
 </head>
 <body>
 
-    <h1>亲爱的 瑜瑜 ❤️</h1>
+<h1>瑜瑜的照片 📸</h1>
 
-    <div class="days-box">
-        我们已经在一起 <span id="timeTogether"></span> 💞
-    </div>
+<div class="photo-box">
+    <img src="1761885326952.jpg" alt="瑜瑜照片1">
+    <img src="1761885492079.jpg" alt="瑜瑜照片2">
+    <img src="1761885580077.jpg" alt="瑜瑜照片3">
+    <img src="1761885634304.jpg" alt="瑜瑜照片4">
+    <img src="mmexport1755532277585.jpg" alt="瑜瑜照片5">
+    <img src="mmexport1759643324343.jpg" alt="瑜瑜照片6">
+    <img src="mmexport1759643400112.jpg" alt="瑜瑜照片7">
+    <img src="mmexport1762657315556.jpg" alt="瑜瑜照片8">
+    <img src="mmexport1763200275486.jpg" alt="瑜瑜照片9">
+    <img src="mmexport1763200316221.jpg" alt="瑜瑜照片10">
+    <img src="mmexport1763200346550.jpg" alt="瑜瑜照片11">
+    <img src="mmexport1763200404166.jpg" alt="瑜瑜照片12">
+</div>
 
-    <div class="photo-box">
-        <img src="1761885492079.jpg" alt="我们的回忆1">
-    </div>
+<button class="back-button" onclick="window.location.href='index.html'">🏠 返回主页</button>
 
-    <p>
-        遇见你，是我人生里最温柔的奇迹。<br>
-        我希望未来的每一天，都能陪在你身边，与你一起经历每一次欢笑和成长。<br><br>
-        我不能承诺完美，但我承诺真心与坚定。<br>
-        希望我的出现，让你的世界多一点安心，多一点快乐。<br><br>
-        ❤️ 瑜瑜，你值得被全世界温柔以待 ❤️
-    </p>
+<script>
+// Petal generator
+function createPetal() {
+    const petal = document.createElement("div");
+    petal.classList.add("petal");
+    document.body.appendChild(petal);
+    const size = Math.random() * 12 + 8;
+    petal.style.width = `${size}px`;
+    petal.style.height = `${size}px`;
+    petal.style.left = `${Math.random() * 100}vw`;
+    petal.style.animationDuration = `${Math.random() * 5 + 5}s`;
+    setTimeout(() => petal.remove(), 10000);
+}
 
-    <!-- 4 clickable containers -->
-    <div class="link-containers">
-        <div class="container" onclick="window.location.href='yuyu.html'">📸 瑜瑜的照片</div>
-        <div class="container" onclick="window.location.href='birthday.html'">🎂 生日惊喜</div>
-        <div class="container" onclick="window.location.href='memories.html'">💖 甜蜜回忆</div>
-        <div class="container" onclick="window.location.href='moments.html'">✨ 点点滴滴</div>
-    </div>
+// Heart generator
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "❤";
+    heart.style.left = `${Math.random() * 100}vw`;
+    heart.style.fontSize = `${Math.random() * 15 + 15}px`;
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+}
 
-    <script>
-        // Live relationship timer
-        function updateTime() {
-            const startDate = new Date("2025-06-05T00:00:00");
-            const now = new Date();
-            const diff = now - startDate;
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((diff / (1000 * 60)) % 60);
-            const seconds = Math.floor((diff / 1000) % 60);
-
-            document.getElementById("timeTogether").innerText =
-                `${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
-        }
-
-        setInterval(updateTime, 1000);
-        updateTime();
-
-        // Petal generator
-        function createPetal() {
-            const petal = document.createElement("div");
-            petal.classList.add("petal");
-            document.body.appendChild(petal);
-
-            const size = Math.random() * 10 + 8;
-            petal.style.width = `${size}px`;
-            petal.style.height = `${size}px`;
-            petal.style.left = `${Math.random() * 100}vw`;
-            petal.style.animationDuration = `${Math.random() * 5 + 5}s`;
-
-            setTimeout(() => petal.remove(), 10000);
-        }
-
-        // Heart generator
-        function createHeart() {
-            const heart = document.createElement("div");
-            heart.classList.add("heart");
-            heart.innerHTML = "❤";
-            heart.style.left = `${Math.random() * 100}vw`;
-            heart.style.fontSize = `${Math.random() * 15 + 15}px`;
-            document.body.appendChild(heart);
-
-            setTimeout(() => heart.remove(), 6000);
-        }
-
-        setInterval(createPetal, 300);
-        setInterval(createHeart, 700);
-    </script>
+setInterval(createPetal, 300);
+setInterval(createHeart, 700);
+</script>
 
 </body>
 </html>
