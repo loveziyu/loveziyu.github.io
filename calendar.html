@@ -3,33 +3,124 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Yuyu 的日历 📅</title>
+  <title>Yuyu 的日历</title>
   <style>
-    body { margin: 0; padding: 0; font-family: "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #ffe6f0, #fff0f5); text-align: center; }
-    h1 { margin-top: 30px; color: #ff4b8b; font-size: 2rem; text-shadow: 1px 1px 3px rgba(255,75,139,0.5); }
-    .calendar { width: 90%; max-width: 500px; margin: 20px auto; background: #fff0f5; border-radius: 15px; box-shadow: 0 5px 15px rgba(255,105,180,0.4); padding: 20px; }
-    .month-year { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    .month-year button { background-color: #ff4b8b; color: white; border: none; padding: 5px 10px; border-radius: 10px; cursor: pointer; font-size: 16px; transition: transform 0.2s, box-shadow 0.2s; }
-    .month-year button:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(255,105,180,0.5); }
-    .month-year span { font-size: 1.5rem; font-weight: bold; color: #ff4b8b; }
-    .weekdays, .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-    .weekdays div { font-weight: bold; color: #ff4b8b; }
-    .days div { background: #ffe6f0; padding: 10px 0; border-radius: 8px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; position: relative; }
-    .days div:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(255,105,180,0.4); }
-    .days .today { background: #ff4b8b; color: white; font-weight: bold; }
-    .days .birthday::after { content: "🎂"; position: absolute; top: 5px; right: 5px; font-size: 16px; }
-    .days .period::after { content: "💗"; position: absolute; top: 5px; right: 5px; font-size: 16px; }
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: "Microsoft YaHei", sans-serif; 
+      background: linear-gradient(135deg, #ffe6f0, #fff0f5); 
+      text-align: center; 
+    }
+    h1 { 
+      margin-top: 30px; 
+      color: #ff4b8b; 
+      font-size: 2rem; 
+      text-shadow: 1px 1px 3px rgba(255,75,139,0.5); 
+    }
+    .calendar { 
+      width: 90%; 
+      max-width: 500px; 
+      margin: 20px auto; 
+      background: #fff0f5; 
+      border-radius: 15px; 
+      box-shadow: 0 5px 15px rgba(255,105,180,0.4); 
+      padding: 20px; 
+    }
+    .month-year { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 15px; 
+    }
+    .month-year button { 
+      background-color: #ff4b8b; 
+      color: white; 
+      border: none; 
+      padding: 8px 12px; 
+      border-radius: 10px; 
+      cursor: pointer; 
+      font-size: 18px; 
+      transition: all 0.2s; 
+    }
+    .month-year button:hover { 
+      transform: translateY(-2px); 
+      box-shadow: 0 5px 10px rgba(255,105,180,0.5); 
+    }
+    .month-year span { 
+      font-size: 1.5rem; 
+      font-weight: bold; 
+      color: #ff4b8b; 
+    }
+    .weekdays, .days { 
+      display: grid; 
+      grid-template-columns: repeat(7, 1fr); 
+      gap: 6px; 
+    }
+    .weekdays div { 
+      font-weight: bold; 
+      color: #ff4b8b; 
+      padding: 8px 0; 
+    }
+    .days { 
+      grid-auto-rows: 52px; /* 固定行高，防止塌陷 */
+    }
+    .days div { 
+      background: #ffe6f0; 
+      border-radius: 10px; 
+      cursor: pointer; 
+      transition: all 0.2s; 
+      position: relative; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-weight: bold; 
+      font-size: 1rem; 
+      min-height: 44px; 
+    }
+    .days div:hover { 
+      transform: translateY(-3px); 
+      box-shadow: 0 6px 12px rgba(255,105,180,0.4); 
+    }
+    .days .today { 
+      background: #ff4b8b !important; 
+      color: white; 
+      font-weight: bold; 
+      transform: scale(1.05); 
+    }
+    .days .birthday::after { 
+      content: "生日"; 
+      position: absolute; 
+      top: 4px; 
+      right: 4px; 
+      font-size: 12px; 
+    }
+    .days .period::after { 
+      content: "生理期"; 
+      position: absolute; 
+      top: 4px; 
+      right: 4px; 
+      font-size: 12px; 
+    }
+    .days .empty {
+      background: transparent;
+      cursor: default;
+    }
+    .days .empty:hover {
+      transform: none;
+      box-shadow: none;
+    }
   </style>
 </head>
 <body>
 
-<h1>Yuyu 的日历 📅</h1>
+<h1>Yuyu 的日历</h1>
 
 <div class="calendar">
   <div class="month-year">
-    <button id="prevMonth">⬅</button>
+    <button id="prevMonth">上一月</button>
     <span id="monthYear"></span>
-    <button id="nextMonth">➡</button>
+    <button id="nextMonth">下一月</button>
   </div>
   <div class="weekdays">
     <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
@@ -37,26 +128,30 @@
   <div class="days" id="days"></div>
 </div>
 
-<!-- 引入 calendar.js -->
+<!-- 引入农历转换库 -->
 <script src="https://cdn.jsdelivr.net/npm/js-calendar-converter@0.0.7/dist/calendar.min.js"></script>
 <script>
-  const calendar = window.calendar; // 来自 js‑calendar-converter :contentReference[oaicite:0]{index=0}
+  const calendar = window.calendar;
 
   // Yuyu 农历生日：农历 12 月初二
   function getBirthday(year) {
-    const sol = calendar.lunar2solar(year, 12, 2, false);
-    return { month: sol.cMonth - 1, day: sol.cDay };
+    try {
+      const sol = calendar.lunar2solar(year, 12, 2, false);
+      return { month: sol.cMonth - 1, day: sol.cDay };
+    } catch (e) {
+      return null; // 某些年可能无此日
+    }
   }
 
   // 预测姨妈期：基于上次 2025-11-06，28天周期，5天持续
   function getPeriods(year) {
     const periods = [];
-    const lastStart = new Date(2025, 10, 6); // JS 的月份从 0 开始：10 = Nov
+    const lastStart = new Date(2025, 10, 6); // 2025-11-06
     const cycle = 28;
     const duration = 5;
     let start = new Date(lastStart);
 
-    while (start.getFullYear() <= year) {
+    while (start.getFullYear() <= year + 1) {
       for (let i = 0; i < duration; i++) {
         const d = new Date(start);
         d.setDate(d.getDate() + i);
@@ -81,52 +176,59 @@
     monthYearEl.textContent = `${monthNames[month]} ${year}`;
     daysContainer.innerHTML = "";
 
-    const firstDay = new Date(year, month, 1).getDay();
+    const firstDay = new Date(year, month, 1).getDay(); // 0=周日
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
     const birthday = getBirthday(year);
     const periods = getPeriods(year);
 
-    // 空白格子
+    // 前置空白格子（占位）
     for (let i = 0; i < firstDay; i++) {
       const empty = document.createElement("div");
+      empty.classList.add("empty");
       daysContainer.appendChild(empty);
     }
 
-    // 每天
+    // 填充日期
     for (let d = 1; d <= daysInMonth; d++) {
       const dayDiv = document.createElement("div");
       dayDiv.textContent = d;
 
       const dateObj = new Date(year, month, d);
 
-      // 今天
-      if (dateObj.getFullYear() === today.getFullYear() &&
-          dateObj.getMonth() === today.getMonth() &&
-          dateObj.getDate() === today.getDate()) {
+      // 今天高亮
+      if (dateObj.toDateString() === today.toDateString()) {
         dayDiv.classList.add("today");
       }
 
-      // 生日
-      if (d === birthday.day && month === birthday.month) {
+      // 农历生日
+      if (birthday && d === birthday.day && month === birthday.month) {
         dayDiv.classList.add("birthday");
       }
 
-      // 预测姨妈
+      // 姨妈期
       periods.forEach(p => {
         if (p.getFullYear() === year && p.getMonth() === month && p.getDate() === d) {
           dayDiv.classList.add("period");
         }
       });
 
+      // 点击事件
       dayDiv.onclick = () => {
-        alert(`你点击了 ${year}-${month + 1}-${d}`);
+        const dateStr = `${year}年${month + 1}月${d}日`;
+        const extra = [];
+        if (dayDiv.classList.contains("birthday")) extra.push("Yuyu 生日！");
+        if (dayDiv.classList.contains("period")) extra.push("生理期");
+        if (dayDiv.classList.contains("today")) extra.push("今天");
+        
+        alert(`${dateStr}${extra.length > 0 ? "\n" + extra.join(" · ") : ""}`);
       };
 
       daysContainer.appendChild(dayDiv);
     }
   }
 
+  // 按钮事件
   document.getElementById("prevMonth").onclick = () => {
     currentMonth--;
     if (currentMonth < 0) {
@@ -135,6 +237,7 @@
     }
     renderCalendar(currentMonth, currentYear);
   };
+
   document.getElementById("nextMonth").onclick = () => {
     currentMonth++;
     if (currentMonth > 11) {
@@ -144,6 +247,7 @@
     renderCalendar(currentMonth, currentYear);
   };
 
+  // 初次渲染
   renderCalendar(currentMonth, currentYear);
 </script>
 
