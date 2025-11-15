@@ -1,179 +1,174 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CSS 3D Sphere Photo Wall</title>
-<style>
-  html, body {
-    margin: 0;
-    height: 100%;
-    background: #111;
-    overflow: hidden;
-    font-family: sans-serif;
-  }
-
-  .hint {
-    position: absolute;
-    left: 12px;
-    top: 12px;
-    background: rgba(0,0,0,0.4);
-    padding: 8px 10px;
-    border-radius: 6px;
-    font-size: 13px;
-    z-index: 100;
-    color: #fff;
-  }
-
-  .scene {
-    width: 100vw;
-    height: 100vh;
-    perspective: 1200px;
-    overflow: visible;
-    position: relative;
-  }
-
-  .sphere {
-    width: 0;
-    height: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform-style: preserve-3d;
-  }
-
-  .sphere img {
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-
-  .sphere img.active {
-    transform: translate3d(-50%, -50%, 300px) scale(3);
-    z-index: 999;
-    box-shadow: 0 0 20px rgba(255,255,255,0.8);
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>Three.js Photo Sphere</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #111; overflow: hidden; }
+    #container { width: 100%; height: 100vh; }
+    .hint {
+      position: absolute;
+      top: 12px; left: 12px;
+      background: rgba(0,0,0,0.4);
+      color: #fff; padding: 6px 10px;
+      border-radius: 5px; font-size: 13px; z-index: 10;
+    }
+  </style>
 </head>
 <body>
-
-<div class="hint">拖拽旋转 · 滚轮缩放 · 点击图片可放大</div>
-
-<div class="scene">
-  <div class="sphere" id="sphere">
-    <!-- 替换为你自己的图片 -->
-    <img src="https://threejs.org/examples/textures/uv_grid_opengl.jpg">
-    <img src="https://threejs.org/examples/textures/flower-1.jpg">
-    <img src="https://threejs.org/examples/textures/flower-2.jpg">
-    <img src="https://threejs.org/examples/textures/flower-3.jpg">
-    <img src="https://threejs.org/examples/textures/flower-4.jpg">
-    <img src="https://threejs.org/examples/textures/flower-5.jpg">
-    <img src="https://threejs.org/examples/textures/flower-6.jpg">
-    <img src="https://threejs.org/examples/textures/flower-7.jpg">
-    <img src="https://threejs.org/examples/textures/flower-8.jpg">
-    <img src="https://threejs.org/examples/textures/flower-9.jpg">
-    <img src="https://threejs.org/examples/textures/flower-10.jpg">
-    <img src="https://threejs.org/examples/textures/flower-11.jpg">
-  </div>
+<div id="container">
+  <div class="hint">拖拽旋转 · 滚轮缩放 · 点击图片可放大</div>
 </div>
 
-<script>
-const sphere = document.getElementById('sphere');
-const images = sphere.querySelectorAll('img');
-const radius = 250; // 球半径
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.158.0/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.158.0/examples/jsm/controls/OrbitControls.js';
 
-// === 1. 均匀放置图片在球面 ===
-function fibonacciSphere(n, r) {
+const container = document.getElementById('container');
+
+// ------------------ 1. Scene & Camera ------------------
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 2000);
+camera.position.set(0, 0, 800);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(container.clientWidth, container.clientHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+container.appendChild(renderer.domElement);
+
+// ------------------ 2. Controls ------------------
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 300;
+controls.maxDistance = 2000;
+
+// ------------------ 3. Lighting ------------------
+scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+
+// ------------------ 4. Images ------------------
+const images = [
+  "https://threejs.org/examples/textures/uv_grid_opengl.jpg",
+  "https://threejs.org/examples/textures/flower-1.jpg",
+  "https://threejs.org/examples/textures/flower-2.jpg",
+  "https://threejs.org/examples/textures/flower-3.jpg",
+  "https://threejs.org/examples/textures/flower-4.jpg",
+  "https://threejs.org/examples/textures/flower-5.jpg",
+];
+
+const loader = new THREE.TextureLoader();
+const group = new THREE.Group();
+scene.add(group);
+
+const radius = 400;
+const planeSize = 140;
+
+// Fibonacci sphere for even distribution
+function fibonacciSpherePoints(n, r) {
   const points = [];
   const golden = Math.PI * (3 - Math.sqrt(5));
   for (let i = 0; i < n; i++) {
-    const y = 1 - (i / (n - 1)) * 2; // -1 到 1
-    const radiusAtY = Math.sqrt(1 - y * y);
+    const y = 1 - (i / (n - 1)) * 2;
+    const radiusAtY = Math.sqrt(1 - y*y);
     const theta = golden * i;
     const x = Math.cos(theta) * radiusAtY;
     const z = Math.sin(theta) * radiusAtY;
-    points.push({x: x*r, y: y*r, z: z*r});
+    points.push(new THREE.Vector3(x*r, y*r, z*r));
   }
   return points;
 }
 
-const points = fibonacciSphere(images.length, radius);
-images.forEach((img, i) => {
-  const p = points[i];
-  img.dataset.x = p.x;
-  img.dataset.y = p.y;
-  img.dataset.z = p.z;
-  img.style.transform = `translate3d(${p.x}px, ${p.y}px, ${p.z}px)`;
-});
+const points = fibonacciSpherePoints(images.length, radius);
 
-// === 2. 拖拽旋转 ===
-let rotX = 0, rotY = 0;
-let lastX, lastY, dragging = false;
+// Add planes for each image
+images.forEach((src, i) => {
+  loader.load(src, texture => {
+    const aspect = texture.image.width / texture.image.height;
+    const geo = new THREE.PlaneGeometry(planeSize*aspect, planeSize);
+    const mat = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+    const mesh = new THREE.Mesh(geo, mat);
 
-document.addEventListener('mousedown', e => {
-  dragging = true;
-  lastX = e.clientX;
-  lastY = e.clientY;
-});
-document.addEventListener('mouseup', e => dragging = false);
-document.addEventListener('mousemove', e => {
-  if(!dragging) return;
-  const dx = e.clientX - lastX;
-  const dy = e.clientY - lastY;
-  rotY += dx * 0.3;
-  rotX -= dy * 0.3;
-  rotX = Math.max(Math.min(rotX, 90), -90);
-  updateSphere();
-  lastX = e.clientX;
-  lastY = e.clientY;
-});
+    const p = points[i];
+    mesh.position.copy(p);
 
-// === 3. 鼠标滚轮缩放 ===
-let scale = 1;
-document.addEventListener('wheel', e => {
-  e.preventDefault();
-  scale += e.deltaY * -0.001;
-  scale = Math.min(Math.max(0.5, scale), 2);
-  updateSphere();
-});
+    // Make image face outward
+    mesh.lookAt(new THREE.Vector3(0,0,0));
+    mesh.rotateY(Math.PI);
 
-// === 4. 点击图片放大 ===
-images.forEach(img => {
-  img.addEventListener('click', e => {
-    images.forEach(i => i.classList.remove('active'));
-    if(!img.classList.contains('active')) img.classList.add('active');
-    e.stopPropagation();
+    mesh.userData = { src };
+    group.add(mesh);
   });
 });
-document.addEventListener('click', () => images.forEach(i => i.classList.remove('active')));
 
-// === 5. 更新球体和让图片始终面向摄像机 ===
-function updateSphere() {
-  const radX = rotX * Math.PI / 180;
-  const radY = rotY * Math.PI / 180;
-  images.forEach(img => {
-    const x0 = parseFloat(img.dataset.x);
-    const y0 = parseFloat(img.dataset.y);
-    const z0 = parseFloat(img.dataset.z);
+// ------------------ 5. Raycaster for clicking ------------------
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let popupMesh = null;
 
-    // 旋转球坐标
-    let x1 = x0 * Math.cos(radY) - z0 * Math.sin(radY);
-    let z1 = x0 * Math.sin(radY) + z0 * Math.cos(radY);
-    let y1 = y0 * Math.cos(radX) - z1 * Math.sin(radX);
-    let z2 = y0 * Math.sin(radX) + z1 * Math.cos(radX);
+function onClick(event) {
+  const rect = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-    // 图片面向摄像机
-    img.style.transform = `translate3d(${x1}px, ${y1}px, ${z2}px) rotateY(${-rotY}deg) rotateX(${rotX}deg) scale(${scale})`;
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(group.children, false);
+  if(intersects.length > 0) {
+    const mesh = intersects[0].object;
+    openPopup(mesh.userData.src);
+  }
+}
+renderer.domElement.addEventListener('click', onClick);
+
+function openPopup(src) {
+  if(popupMesh) {
+    scene.remove(popupMesh);
+    popupMesh.geometry.dispose();
+    popupMesh.material.map.dispose();
+    popupMesh.material.dispose();
+    popupMesh = null;
+  }
+  loader.load(src, tex => {
+    const popupSize = Math.min(window.innerWidth*0.6, window.innerHeight*0.6);
+    const aspect = tex.image.width / tex.image.height;
+    const geo = new THREE.PlaneGeometry(popupSize*aspect, popupSize);
+    const mat = new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide });
+    popupMesh = new THREE.Mesh(geo, mat);
+    popupMesh.position.set(0,0,camera.position.z-200);
+    scene.add(popupMesh);
+
+    setTimeout(() => window.addEventListener('click', () => {
+      scene.remove(popupMesh);
+      popupMesh.geometry.dispose();
+      popupMesh.material.map.dispose();
+      popupMesh.material.dispose();
+      popupMesh = null;
+    }, { once: true }), 50);
   });
 }
 
-// 初始渲染
-updateSphere();
-</script>
+// ------------------ 6. Animation ------------------
+let lastTime = performance.now();
+function animate() {
+  requestAnimationFrame(animate);
+  const now = performance.now();
+  const delta = (now - lastTime)/1000;
+  lastTime = now;
 
+  // Slight auto-rotation
+  group.rotation.y += 0.05*delta;
+
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+// ------------------ 7. Resize ------------------
+window.addEventListener('resize', () => {
+  camera.aspect = container.clientWidth/container.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(container.clientWidth, container.clientHeight);
+});
+
+</script>
 </body>
 </html>
