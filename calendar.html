@@ -5,185 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Yuyu 的日历</title>
   <style>
-    body { 
-      margin: 0; 
-      padding: 0; 
-      font-family: "Microsoft YaHei", "Segoe UI", sans-serif; 
-      background: linear-gradient(135deg, #ffe6f0, #fff0f5); 
-      text-align: center; 
-      color: #333;
+    body {
+      margin: 0; padding: 0; font-family: "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #ffe6f0, #fff0f5); text-align: center;
     }
-    h1 { 
-      margin-top: 30px; 
-      color: #ff4b8b; 
-      font-size: 2rem; 
-      text-shadow: 1px 1px 3px rgba(255,75,139,0.5); 
+    h1 { margin-top: 30px; color: #ff4b8b; font-size: 2rem; text-shadow: 1px 1px 3px rgba(255,75,139,0.5); }
+    .calendar {
+      width: 90%; max-width: 500px; margin: 20px auto; background: #fff0f5;
+      border-radius: 15px; box-shadow: 0 5px 15px rgba(255,105,180,0.4); padding: 20px;
     }
-    .calendar { 
-      width: 90%; 
-      max-width: 500px; 
-      margin: 20px auto; 
-      background: #fff0f5; 
-      border-radius: 15px; 
-      box-shadow: 0 5px 15px rgba(255,105,180,0.4); 
-      padding: 20px; 
+    .month-year { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .month-year button {
+      background: #ff4b8b; color: white; border: none; padding: 8px 14px;
+      border-radius: 10px; cursor: pointer; font-size: 18px; transition: all 0.2s;
     }
-    .month-year { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      margin-bottom: 15px; 
+    .month-year button:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(255,105,180,0.5); }
+    .month-year span { font-size: 1.5rem; font-weight: bold; color: #ff4b8b; }
+    .weekdays, .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .weekdays div { font-weight: bold; color: #ff4b8b; padding: 8px 0; }
+    .days { grid-auto-rows: 52px; }
+    .days div {
+      background: #ffe6f0; border-radius: 10px; cursor: pointer; transition: all 0.2s;
+      position: relative; display: flex; align-items: center; justify-content: center;
+      font-weight: bold; min-height: 44px; font-size: 1rem;
     }
-    .month-year button { 
-      background-color: #ff4b8b; 
-      color: white; 
-      border: none; 
-      padding: 8px 14px; 
-      border-radius: 10px; 
-      cursor: pointer; 
-      font-size: 18px; 
-      transition: all 0.2s; 
+    .days div:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(255,105,180,0.4); }
+    .days .today { background: #ff4b8b !important; color: white; transform: scale(1.1); z-index: 1; }
+    .days .birthday::before {
+      content: "生日 🎂"; position: absolute; top: 2px; right: 4px;
+      font-size: 10px; color: #fff; background: #ff69b4; padding: 1px 4px; border-radius: 6px;
     }
-    .month-year button:hover { 
-      transform: translateY(-2px); 
-      box-shadow: 0 5px 10px rgba(255,105,180,0.5); 
+    .days .period::before {
+      content: "生理期 💗"; position: absolute; top: 2px; right: 4px;
+      font-size: 10px; color: #fff; background: #ff1493; padding: 1px 4px; border-radius: 6px;
     }
-    .month-year span { 
-      font-size: 1.5rem; 
-      font-weight: bold; 
-      color: #ff4b8b; 
-    }
-    .weekdays, .days { 
-      display: grid; 
-      grid-template-columns: repeat(7, 1fr); 
-      gap: 6px; 
-    }
-    .weekdays div { 
-      font-weight: bold; 
-      color: #ff4b8b; 
-      padding: 8px 0; 
-      font-size: 0.9rem;
-    }
-    .days { 
-      grid-auto-rows: 52px;
-    }
-    .days div { 
-      background: #ffe6f0; 
-      border-radius: 10px; 
-      cursor: pointer; 
-      transition: all 0.2s; 
-      position: relative; 
-      display: flex; 
-      align-items: center; 
-      justify-content: center; 
-      font-weight: bold; 
-      font-size: 1rem; 
-      min-height: 44px; 
-    }
-    .days div:hover { 
-      transform: translateY(-3px); 
-      box-shadow: 0 6px 12px rgba(255,105,180,0.4); 
-    }
-    .days .today { 
-      background: #ff4b8b !important; 
-      color: white; 
-      font-weight: bold; 
-      transform: scale(1.1); 
-      z-index: 1;
-    }
-    .days .birthday::before { 
-      content: "生日"; 
-      position: absolute; 
-      top: 2px; 
-      right: 4px; 
-      font-size: 10px; 
-      color: #fff; 
-      background: #ff69b4; 
-      padding: 1px 4px; 
-      border-radius: 6px; 
-    }
-    .days .period::before { 
-      content: "生理期"; 
-      position: absolute; 
-      top: 2px; 
-      right: 4px; 
-      font-size: 10px; 
-      color: #fff; 
-      background: #ff1493; 
-      padding: 1px 4px; 
-      border-radius: 6px; 
-    }
-    .days .empty {
-      background: transparent;
-      cursor: default;
-    }
-    .days .empty:hover {
-      transform: none;
-      box-shadow: none;
-    }
-    .footer {
-      margin-top: 30px;
-      font-size: 0.8rem;
-      color: #ff69b4;
-    }
+    .days .empty { background: transparent; cursor: default; }
+    .days .empty:hover { transform: none; box-shadow: none; }
+    .footer { margin-top: 30px; font-size: 0.8rem; color: #ff69b4; }
   </style>
 </head>
 <body>
-
-<h1>Yuyu 的日历</h1>
-
+<h1>Yuyu 的日历 📅</h1>
 <div class="calendar">
   <div class="month-year">
-    <button id="prevMonth">上一月</button>
+    <button id="prevMonth">⬅ 上一月</button>
     <span id="monthYear"></span>
-    <button id="nextMonth">下一月</button>
+    <button id="nextMonth">下一月 ➡</button>
   </div>
   <div class="weekdays">
     <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
   </div>
   <div class="days" id="days"></div>
 </div>
+<div class="footer">专属 Yuyu ❤️ 2025-11-15 MYT | 已修复年份偏移（加一逻辑）</div>
 
-<div class="footer">
-  专属定制 ❤️ 2025-11-15
-</div>
-
-<!-- 农历转换库 -->
-<script src="https://cdn.jsdelivr.net/npm/js-calendar-converter@0.0.7/dist/calendar.min.js"></script>
+<!-- 农历库 -->
+<script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.3.0/lunar.min.js"></script>
 <script>
-  const calendar = window.calendar;
+  // 今天：2025年11月15日
+  const TODAY = new Date(2025, 10, 15);
 
-  // 今天：2025年11月15日（马来西亚时间 +08）
-  const TODAY = new Date(2025, 10, 15); // JS 中 10 = 11月
+  // 获取 Yuyu 农历生日（12月初二）在指定阳历年份的阳历日期（支持跨年 + 加一年份逻辑）
+  function getBirthdayInYear(year) {
+    let lunar, solar;
 
-  // Yuyu 农历生日：12月初二
-  function getLunarBirthday(year) {
-    try {
-      const solar = calendar.lunar2solar(year, 12, 2, false);
-      if (solar && solar.cDay) {
-        return { month: solar.cMonth - 1, day: solar.cDay };
+    // 尝试多个农历年：当前年 + 加一（覆盖跨年偏移）
+    const lunarYearsToTry = [year, year + 1, year - 1];
+
+    for (let lunarYear of lunarYearsToTry) {
+      try {
+        lunar = Lunar.fromYmd(lunarYear, 12, 2);
+        solar = lunar.getSolar();
+        if (solar.getYear() === year) {  // 只取落在本阳历年的日期
+          return { month: solar.getMonth() - 1, day: solar.getDay() };
+        }
+      } catch (e) {
+        // 忽略无效年份
       }
-    } catch (e) {
-      console.log("农历转换失败：", year);
     }
-    return null;
+
+    return null;  // 如果都失败，返回 null
   }
 
-  // 姨妈预测：从 2025-11-06 开始，28天周期，持续5天
-  function getPeriodDates(year) {
+  // 姨妈预测：从 2025-11-06 开始，28天周期，5天
+  function getPeriods(year) {
     const periods = [];
-    const lastStart = new Date(2025, 10, 6); // 2025-11-06
+    const lastStart = new Date(2025, 10, 6);
     const cycle = 28;
     const duration = 5;
     let start = new Date(lastStart);
-
     while (start.getFullYear() <= year + 1) {
       for (let i = 0; i < duration; i++) {
         const d = new Date(start);
         d.setDate(d.getDate() + i);
-        if (d.getFullYear() === year) {
-          periods.push(new Date(d));
-        }
+        if (d.getFullYear() === year) periods.push(new Date(d));
       }
       start.setDate(start.getDate() + cycle);
     }
@@ -204,8 +119,8 @@
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    const birthday = getLunarBirthday(year);
-    const periods = getPeriodDates(year);
+    const birthday = getBirthdayInYear(year);
+    const periods = getPeriods(year);
 
     // 空白格子
     for (let i = 0; i < firstDay; i++) {
@@ -214,19 +129,18 @@
       daysContainer.appendChild(empty);
     }
 
-    // 日期格子
+    // 日期
     for (let d = 1; d <= daysInMonth; d++) {
       const dayDiv = document.createElement("div");
       dayDiv.textContent = d;
-
       const dateObj = new Date(year, month, d);
 
-      // 今天高亮
+      // 今天
       if (dateObj.toDateString() === TODAY.toDateString()) {
         dayDiv.classList.add("today");
       }
 
-      // 生日标记
+      // 生日（现在支持年份偏移）
       if (birthday && d === birthday.day && month === birthday.month) {
         dayDiv.classList.add("birthday");
       }
@@ -238,15 +152,13 @@
         }
       });
 
-      // 点击弹窗
+      // 点击
       dayDiv.onclick = () => {
-        const dateStr = `${year}年${month + 1}月${d}日`;
         const marks = [];
-        if (dayDiv.classList.contains("birthday")) marks.push("Yuyu 生日");
-        if (dayDiv.classList.contains("period")) marks.push("生理期");
+        if (dayDiv.classList.contains("birthday")) marks.push("Yuyu 生日 🎂");
+        if (dayDiv.classList.contains("period")) marks.push("生理期 💗");
         if (dayDiv.classList.contains("today")) marks.push("今天");
-
-        alert(`${dateStr}${marks.length ? "\n" + marks.join(" · ") : ""}`);
+        alert(`${year}年${month + 1}月${d}日${marks.length ? "\n" + marks.join(" · ") : ""}`);
       };
 
       daysContainer.appendChild(dayDiv);
@@ -255,13 +167,12 @@
 
   // 按钮
   document.getElementById("prevMonth").onclick = () => {
-    currentMonth--;
+    currentMonth--; 
     if (currentMonth < 0) { currentMonth = 11; currentYear--; }
     renderCalendar(currentMonth, currentYear);
   };
-
   document.getElementById("nextMonth").onclick = () => {
-    currentMonth++;
+    currentMonth++; 
     if (currentMonth > 11) { currentMonth = 0; currentYear++; }
     renderCalendar(currentMonth, currentYear);
   };
@@ -269,6 +180,5 @@
   // 启动
   renderCalendar(currentMonth, currentYear);
 </script>
-
 </body>
 </html>
