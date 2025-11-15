@@ -8,9 +8,10 @@
     body { 
       margin: 0; 
       padding: 0; 
-      font-family: "Microsoft YaHei", sans-serif; 
+      font-family: "Microsoft YaHei", "Segoe UI", sans-serif; 
       background: linear-gradient(135deg, #ffe6f0, #fff0f5); 
       text-align: center; 
+      color: #333;
     }
     h1 { 
       margin-top: 30px; 
@@ -37,7 +38,7 @@
       background-color: #ff4b8b; 
       color: white; 
       border: none; 
-      padding: 8px 12px; 
+      padding: 8px 14px; 
       border-radius: 10px; 
       cursor: pointer; 
       font-size: 18px; 
@@ -61,9 +62,10 @@
       font-weight: bold; 
       color: #ff4b8b; 
       padding: 8px 0; 
+      font-size: 0.9rem;
     }
     .days { 
-      grid-auto-rows: 52px; /* 固定行高，防止塌陷 */
+      grid-auto-rows: 52px;
     }
     .days div { 
       background: #ffe6f0; 
@@ -86,21 +88,30 @@
       background: #ff4b8b !important; 
       color: white; 
       font-weight: bold; 
-      transform: scale(1.05); 
+      transform: scale(1.1); 
+      z-index: 1;
     }
-    .days .birthday::after { 
+    .days .birthday::before { 
       content: "生日"; 
       position: absolute; 
-      top: 4px; 
+      top: 2px; 
       right: 4px; 
-      font-size: 12px; 
+      font-size: 10px; 
+      color: #fff; 
+      background: #ff69b4; 
+      padding: 1px 4px; 
+      border-radius: 6px; 
     }
-    .days .period::after { 
+    .days .period::before { 
       content: "生理期"; 
       position: absolute; 
-      top: 4px; 
+      top: 2px; 
       right: 4px; 
-      font-size: 12px; 
+      font-size: 10px; 
+      color: #fff; 
+      background: #ff1493; 
+      padding: 1px 4px; 
+      border-radius: 6px; 
     }
     .days .empty {
       background: transparent;
@@ -109,6 +120,11 @@
     .days .empty:hover {
       transform: none;
       box-shadow: none;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 0.8rem;
+      color: #ff69b4;
     }
   </style>
 </head>
@@ -128,23 +144,33 @@
   <div class="days" id="days"></div>
 </div>
 
-<!-- 引入农历转换库 -->
+<div class="footer">
+  专属定制 ❤️ 2025-11-15
+</div>
+
+<!-- 农历转换库 -->
 <script src="https://cdn.jsdelivr.net/npm/js-calendar-converter@0.0.7/dist/calendar.min.js"></script>
 <script>
   const calendar = window.calendar;
 
-  // Yuyu 农历生日：农历 12 月初二
-  function getBirthday(year) {
+  // 今天：2025年11月15日（马来西亚时间 +08）
+  const TODAY = new Date(2025, 10, 15); // JS 中 10 = 11月
+
+  // Yuyu 农历生日：12月初二
+  function getLunarBirthday(year) {
     try {
-      const sol = calendar.lunar2solar(year, 12, 2, false);
-      return { month: sol.cMonth - 1, day: sol.cDay };
+      const solar = calendar.lunar2solar(year, 12, 2, false);
+      if (solar && solar.cDay) {
+        return { month: solar.cMonth - 1, day: solar.cDay };
+      }
     } catch (e) {
-      return null; // 某些年可能无此日
+      console.log("农历转换失败：", year);
     }
+    return null;
   }
 
-  // 预测姨妈期：基于上次 2025-11-06，28天周期，5天持续
-  function getPeriods(year) {
+  // 姨妈预测：从 2025-11-06 开始，28天周期，持续5天
+  function getPeriodDates(year) {
     const periods = [];
     const lastStart = new Date(2025, 10, 6); // 2025-11-06
     const cycle = 28;
@@ -165,9 +191,8 @@
   }
 
   const monthNames = ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
-  const today = new Date();
-  let currentMonth = today.getMonth();
-  let currentYear = today.getFullYear();
+  let currentMonth = TODAY.getMonth();
+  let currentYear = TODAY.getFullYear();
 
   const monthYearEl = document.getElementById("monthYear");
   const daysContainer = document.getElementById("days");
@@ -176,20 +201,20 @@
     monthYearEl.textContent = `${monthNames[month]} ${year}`;
     daysContainer.innerHTML = "";
 
-    const firstDay = new Date(year, month, 1).getDay(); // 0=周日
+    const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    const birthday = getBirthday(year);
-    const periods = getPeriods(year);
+    const birthday = getLunarBirthday(year);
+    const periods = getPeriodDates(year);
 
-    // 前置空白格子（占位）
+    // 空白格子
     for (let i = 0; i < firstDay; i++) {
       const empty = document.createElement("div");
       empty.classList.add("empty");
       daysContainer.appendChild(empty);
     }
 
-    // 填充日期
+    // 日期格子
     for (let d = 1; d <= daysInMonth; d++) {
       const dayDiv = document.createElement("div");
       dayDiv.textContent = d;
@@ -197,11 +222,11 @@
       const dateObj = new Date(year, month, d);
 
       // 今天高亮
-      if (dateObj.toDateString() === today.toDateString()) {
+      if (dateObj.toDateString() === TODAY.toDateString()) {
         dayDiv.classList.add("today");
       }
 
-      // 农历生日
+      // 生日标记
       if (birthday && d === birthday.day && month === birthday.month) {
         dayDiv.classList.add("birthday");
       }
@@ -213,41 +238,35 @@
         }
       });
 
-      // 点击事件
+      // 点击弹窗
       dayDiv.onclick = () => {
         const dateStr = `${year}年${month + 1}月${d}日`;
-        const extra = [];
-        if (dayDiv.classList.contains("birthday")) extra.push("Yuyu 生日！");
-        if (dayDiv.classList.contains("period")) extra.push("生理期");
-        if (dayDiv.classList.contains("today")) extra.push("今天");
-        
-        alert(`${dateStr}${extra.length > 0 ? "\n" + extra.join(" · ") : ""}`);
+        const marks = [];
+        if (dayDiv.classList.contains("birthday")) marks.push("Yuyu 生日");
+        if (dayDiv.classList.contains("period")) marks.push("生理期");
+        if (dayDiv.classList.contains("today")) marks.push("今天");
+
+        alert(`${dateStr}${marks.length ? "\n" + marks.join(" · ") : ""}`);
       };
 
       daysContainer.appendChild(dayDiv);
     }
   }
 
-  // 按钮事件
+  // 按钮
   document.getElementById("prevMonth").onclick = () => {
     currentMonth--;
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
-    }
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
     renderCalendar(currentMonth, currentYear);
   };
 
   document.getElementById("nextMonth").onclick = () => {
     currentMonth++;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
     renderCalendar(currentMonth, currentYear);
   };
 
-  // 初次渲染
+  // 启动
   renderCalendar(currentMonth, currentYear);
 </script>
 
