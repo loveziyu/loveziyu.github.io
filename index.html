@@ -20,18 +20,18 @@
             margin-top: 40px;
         }
 
-        p {
-            font-size: 18px;
-            color: #ff6fa5;
-            padding: 0 20px;
-            line-height: 1.8;
-        }
-
         .days-box {
             margin-top: 10px;
             font-size: 22px;
             font-weight: bold;
             color: #ff4b8b;
+        }
+
+        p {
+            font-size: 18px;
+            color: #ff6fa5;
+            padding: 0 20px;
+            line-height: 1.8;
         }
 
         .photo-box {
@@ -87,7 +87,7 @@
     <h1>亲爱的 瑜瑜 ❤️</h1>
 
     <div class="days-box">
-        我们已经在一起 <span id="days"></span> 天了 💞
+        我们已经在一起 <span id="timeTogether"></span> 💞
     </div>
 
     <div class="photo-box">
@@ -103,12 +103,23 @@
     </p>
 
     <script>
-        // Calculate days since start date
-        const startDate = new Date("2025-06-05");
-        const today = new Date();
-        const difference = today - startDate;
-        const daysTogether = Math.floor(difference / (1000 * 60 * 60 * 24));
-        document.getElementById("days").innerText = daysTogether;
+        // Live relationship timer
+        function updateTime() {
+            const startDate = new Date("2025-06-05T00:00:00");
+            const now = new Date();
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById("timeTogether").innerText =
+                `${days}天 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime();
 
         // Petal generator
         function createPetal() {
