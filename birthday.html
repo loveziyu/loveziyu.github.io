@@ -1,153 +1,189 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>生日惊喜 🎂</title>
-<style>
-body {
-    margin: 0;
-    padding: 0;
-    font-family: "Microsoft YaHei", sans-serif;
-    background: linear-gradient(#ffd6e9, #ffe9f3);
-    text-align: center;
-    overflow: hidden;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生日惊喜 🎂</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+SC:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Morandi Palette to match Home/Calendar */
+            --m-blue: #9eb1bb;
+            --m-sage: #b4bdb3;
+            --m-rose: #c7a9a4;
+            --m-oat: #e5e1da;
+            --m-dark: #5a5a5a;
+            --glass: rgba(255, 255, 255, 0.6);
+        }
 
-h1 {
-    font-size: 2rem;
-    color: #ff4b8b;
-    margin-top: 40px;
-    text-shadow: 1px 1px 5px rgba(255, 75, 139, 0.5);
-}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #e5e1da 0%, #d4d0c8 100%);
+            color: var(--m-dark);
+            text-align: center;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-.password-box {
-    margin-top: 50px;
-}
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            letter-spacing: 5px;
+            color: var(--m-dark);
+            margin-top: 60px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
 
-input[type="password"] {
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 10px;
-    border: 2px solid #ff9fc7;
-    outline: none;
-}
+        /* High Class Input & Button */
+        .password-box {
+            margin-top: 50px;
+            background: var(--glass);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 10px;
-    border: none;
-    background-color: #ff4b8b;
-    color: white;
-    cursor: pointer;
-    margin-left: 10px;
-    box-shadow: 0 5px 15px rgba(255,105,180,0.4);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
+        input[type="password"] {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 0;
+            border: none;
+            border-bottom: 1px solid var(--m-rose);
+            background: transparent;
+            outline: none;
+            color: var(--m-dark);
+            font-family: 'Cinzel', serif;
+            text-align: center;
+        }
 
-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(255,105,180,0.5);
-}
+        button {
+            padding: 12px 30px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            border-radius: 0;
+            border: 1px solid var(--m-dark);
+            background: transparent;
+            color: var(--m-dark);
+            cursor: pointer;
+            transition: all 0.4s;
+            margin-top: 20px;
+        }
 
-.hidden { display: none; }
+        button:hover {
+            background: var(--m-dark);
+            color: white;
+        }
 
-.countdown {
-    font-size: 4rem;
-    color: #ff4b8b;
-    margin-top: 50px;
-}
+        .hidden { display: none; }
 
-/* Simple multi-layer cake */
-.cake-container {
-    position: relative;
-    width: 180px;
-    margin: 30px auto;
-}
+        .countdown {
+            font-family: 'Cinzel', serif;
+            font-size: 5rem;
+            color: var(--m-rose);
+            margin-top: 80px;
+            animation: pulse 1s infinite;
+        }
 
-.cake-layer {
-    width: 100%;
-    height: 50px;
-    border-radius: 20px 20px 10px 10px;
-    background: #ff9fc7;
-    box-shadow: 0 5px 12px rgba(255,105,180,0.3);
-    margin-bottom: 5px;
-}
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.8; }
+        }
 
-.cake-layer:nth-child(2) {
-    background: #ffb6c1;
-    height: 45px;
-}
+        /* Elegant Minimalist Cake */
+        .cake-container {
+            position: relative;
+            width: 200px;
+            margin: 50px auto;
+        }
 
-.cake-layer:nth-child(3) {
-    background: #ffc1d1;
-    height: 40px;
-}
+        .cake-layer {
+            width: 100%;
+            height: 45px;
+            background: white;
+            border: 1px solid #eee;
+            margin-bottom: 4px;
+        }
 
-/* Candles */
-.candles {
-    position: absolute;
-    top: -30px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
+        .cake-layer:nth-child(1) { width: 60%; margin: 0 auto 4px auto; background: var(--m-rose); opacity: 0.7;}
+        .cake-layer:nth-child(2) { width: 80%; margin: 0 auto 4px auto; background: var(--m-sage); opacity: 0.7;}
+        .cake-layer:nth-child(3) { width: 100%; background: var(--m-blue); opacity: 0.7;}
 
-.candle {
-    width: 6px;
-    height: 35px;
-    background: #fff176;
-    border-radius: 3px;
-    position: relative;
-}
+        .candles {
+            position: absolute;
+            top: -35px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
 
-.flame {
-    position: absolute;
-    top: -18px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 10px;
-    height: 15px;
-    background: radial-gradient(circle, #ffeb3b 0%, #f44336 70%);
-    border-radius: 50%;
-    animation: flicker 0.3s infinite alternate;
-}
+        .candle {
+            width: 4px;
+            height: 35px;
+            background: #eee;
+            position: relative;
+        }
 
-@keyframes flicker {
-    0% { transform: translateX(-50%) scale(1); opacity: 1; }
-    100% { transform: translateX(-50%) scale(1.3); opacity: 0.8; }
-}
+        .flame {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 12px;
+            background: #e9c46a; /* Soft gold flame */
+            border-radius: 50% 50% 20% 20%;
+            animation: flicker 0.5s infinite alternate;
+            box-shadow: 0 0 10px #e9c46a;
+        }
 
-/* Flying wishes */
-.wish {
-    position: fixed;
-    font-size: 16px;
-    color: #ff4b8b;
-    animation: fly 6s linear forwards;
-    pointer-events: none;
-    white-space: nowrap;
-}
+        @keyframes flicker {
+            from { transform: translateX(-50%) rotate(-2deg); }
+            to { transform: translateX(-50%) rotate(2deg); }
+        }
 
-@keyframes fly {
-    0% { transform: translateY(100vh) translateX(0) scale(1); opacity: 1; }
-    100% { transform: translateY(-50vh) translateX(50px) scale(1.5); opacity: 0; }
-}
+        /* Floating Morandi Wishes */
+        .wish {
+            position: fixed;
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 300;
+            color: var(--m-dark);
+            opacity: 0.7;
+            animation: flyUp 8s linear forwards;
+            pointer-events: none;
+        }
 
-#returnHome {
-    margin-top: 20px;
-    display: none;
-}
-</style>
+        @keyframes flyUp {
+            0% { transform: translateY(100vh); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-20vh); opacity: 0; }
+        }
+
+        #returnHome {
+            margin: 40px 0;
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
-<h1>生日惊喜 🎂</h1>
+<h1>The Surprise</h1>
 
 <div class="password-box" id="passwordBox">
-    <input type="password" id="birthdayPass" placeholder="请输入密码">
-    <button onclick="checkPassword()">确认</button>
+    <input type="password" id="birthdayPass" placeholder="ENTER DATE (MMDD)">
+    <br>
+    <button onclick="checkPassword()">UNLOCK MEMORY</button>
 </div>
 
 <div id="countdownBox" class="hidden">
@@ -159,24 +195,24 @@ button:hover {
         <div class="cake-layer"></div>
         <div class="cake-layer"></div>
         <div class="cake-layer"></div>
-        <div class="candles" id="candles"></div>
+        <div id="candles" class="candles"></div>
     </div>
-    <p>闭上眼睛，许个愿吧 ✨</p>
-    <button id="blowButton" class="hidden" onclick="blowCandles()">吹蜡烛 🎉</button>
+    <p style="font-style: italic; letter-spacing: 1px;">闭上眼睛，许个愿吧 ✨</p>
+    <button id="blowButton" class="hidden" onclick="blowCandles()">吹熄蜡烛 🎉</button>
 </div>
 
-<button id="returnHome" onclick="goHome()">🏠 返回主页</button>
+<button id="returnHome" onclick="goHome()">RETURN HOME</button>
 
 <script>
 const correctPassword = "1202"; 
 const wishes = [
-    "生日快乐！🎉",
-    "愿你永远开心、健康、美丽！💖",
-    "今天是你的特别日子！🌸",
-    "谢谢你出现在我的生命里！❤️",
-    "愿你的每一天都充满甜蜜和温暖！🍬",
-    "祝你笑口常开，幸福常伴！✨",
-    "爱你的每一天都值得纪念！💞"
+    "生日快乐，瑜瑜 ✨",
+    "愿你岁岁平安，万事顺意 🌸",
+    "遇见你，是生命中最优雅的意外 ❤️",
+    "愿你的每一天都充满宁静与温柔 🕊️",
+    "祝你笑口常开，幸福常伴 ✨",
+    "爱你的每一天都值得纪念 💖",
+    "山河远阔，人间星河，无一是你，无一不是你 💫"
 ];
 
 function checkPassword() {
@@ -185,7 +221,7 @@ function checkPassword() {
         document.getElementById("passwordBox").classList.add("hidden");
         startCountdown();
     } else {
-        alert("密码错误，请再试一次！");
+        alert("密码错误，请再试一次");
     }
 }
 
@@ -195,12 +231,13 @@ function startCountdown() {
     countdownBox.classList.remove("hidden");
     let count = 5;
     const interval = setInterval(() => {
-        countdownNumber.innerText = count;
         count--;
-        if(count < 0){
+        if(count <= 0){
             clearInterval(interval);
             countdownBox.classList.add("hidden");
             showCake();
+        } else {
+            countdownNumber.innerText = count;
         }
     }, 1000);
 }
@@ -209,38 +246,37 @@ function showCake() {
     const cakeBox = document.getElementById("cakeBox");
     cakeBox.classList.remove("hidden");
 
-    const candles = document.getElementById("candles");
-    for(let i=0;i<3;i++){
+    const candlesDiv = document.getElementById("candles");
+    for(let i=0; i<3; i++){
         const candle = document.createElement("div");
         candle.classList.add("candle");
         const flame = document.createElement("div");
         flame.classList.add("flame");
         candle.appendChild(flame);
-        candles.appendChild(candle);
+        candlesDiv.appendChild(candle);
     }
 
-    // 10秒许愿
+    // 5 second wish wait
     setTimeout(() => {
         document.getElementById("blowButton").classList.remove("hidden");
-    }, 10000); 
+    }, 5000); 
 }
 
 function blowCandles() {
     document.getElementById("blowButton").classList.add("hidden");
-    document.getElementById("candles").innerHTML = ""; // remove flames
+    document.getElementById("candles").innerHTML = ""; // flames out
 
-    // Show animated wishes
+    // Create floating wishes
     setInterval(() => {
         const wish = document.createElement("div");
         wish.classList.add("wish");
         wish.innerText = wishes[Math.floor(Math.random()*wishes.length)];
-        wish.style.left = Math.random()*80 + "vw";
-        wish.style.fontSize = Math.random()*12 + 16 + "px";
+        wish.style.left = Math.random()*70 + 10 + "vw";
+        wish.style.fontSize = Math.random()*5 + 14 + "px";
         document.body.appendChild(wish);
-        setTimeout(()=>wish.remove(),6000);
-    }, 800);
+        setTimeout(()=>wish.remove(), 8000);
+    }, 1000);
 
-    // Show return home button
     document.getElementById("returnHome").style.display = "inline-block";
 }
 
