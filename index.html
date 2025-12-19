@@ -89,13 +89,21 @@
             font-style: italic;
         }
 
-        .link-grid {
+   .link-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            /* Forces exactly 5 columns in one row */
+            grid-template-columns: repeat(5, 1fr); 
             gap: 15px;
-            max-width: 900px;
+            max-width: 1000px; /* Slightly wider to accommodate 5 cards comfortably */
             margin: 60px auto;
-            padding: 0 40px;
+            padding: 0 20px;
+        }
+
+        /* Responsive adjustment: Stack them on small mobile screens if it gets too crowded */
+        @media (max-width: 768px) {
+            .link-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
         }
 
         .nav-card {
