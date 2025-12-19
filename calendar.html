@@ -7,12 +7,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+SC:wght@300;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --rose-gold: #b76e79;
-      --soft-pink: #f4cfdf;
-      --gold: #d4af37;
-      --dark-text: #4a4a4a;
-      --bg-gradient: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
-      --glass: rgba(255, 255, 255, 0.7);
+      /* Morandi Palette */
+      --morandi-blue: #9eb1bb;    /* Dusty Blue */
+      --morandi-sage: #b4bdb3;    /* Muted Sage */
+      --morandi-rose: #c7a9a4;    /* Dusty Rose */
+      --morandi-oat: #e5e1da;     /* Oatmeal Gray */
+      --dark-text: #5a5a5a;
+      --bg-gradient: linear-gradient(135deg, #e5e1da 0%, #d4d0c8 100%);
+      --glass: rgba(255, 255, 255, 0.65);
     }
 
     body {
@@ -31,20 +33,22 @@
       margin-top: 50px;
       font-family: 'Cinzel', serif;
       letter-spacing: 5px;
-      color: var(--rose-gold);
+      color: var(--dark-text);
       font-size: 2.2rem;
       text-transform: uppercase;
+      opacity: 0.8;
     }
 
+    /* Calendar Card */
     .calendar-card {
       width: 90%;
       max-width: 450px;
       margin: 20px auto;
       background: var(--glass);
       backdrop-filter: blur(15px);
-      border-radius: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
       padding: 30px;
     }
 
@@ -57,22 +61,32 @@
 
     .month-header span {
       font-family: 'Cinzel', serif;
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       font-weight: 700;
-      color: var(--rose-gold);
+      color: var(--dark-text);
+      letter-spacing: 2px;
     }
 
     .btn-nav {
       background: none;
-      border: 1px solid var(--rose-gold);
-      color: var(--rose-gold);
+      border: 1px solid var(--morandi-blue);
+      color: var(--morandi-blue);
       width: 35px;
       height: 35px;
       border-radius: 50%;
       cursor: pointer;
+      transition: 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* --- CENTERED WEEKDAYS --- */
+    .btn-nav:hover {
+      background: var(--morandi-blue);
+      color: white;
+    }
+
+    /* Centered Weekdays */
     .weekdays {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
@@ -80,17 +94,18 @@
     }
 
     .weekdays div {
-      font-size: 0.7rem;
-      color: #888;
+      font-size: 0.75rem;
+      color: #8a8a8a;
       text-transform: uppercase;
-      text-align: center; /* Centering the text */
-      font-weight: bold;
+      text-align: center; /* PERFECTLY CENTERED */
+      font-weight: 500;
+      letter-spacing: 1px;
     }
 
     .days {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 10px;
+      gap: 8px;
     }
 
     .days div {
@@ -102,10 +117,13 @@
       font-size: 0.9rem;
       cursor: pointer;
       position: relative;
+      transition: 0.3s;
     }
 
+    /* --- Morandi Status Colors --- */
+    
     .days .today {
-      background: var(--rose-gold) !important;
+      background: var(--morandi-blue) !important;
       color: white !important;
     }
 
@@ -113,19 +131,19 @@
       content: '•';
       position: absolute;
       bottom: 2px;
-      color: var(--gold);
+      color: var(--morandi-rose);
       font-size: 24px;
     }
 
     .days .period {
-      background: rgba(244, 207, 223, 0.4);
+      background: rgba(180, 189, 179, 0.3); /* Morandi Sage */
     }
 
     .days .period::before {
       content: "";
       position: absolute;
       width: 5px; height: 5px;
-      background: #ff4b8b;
+      background: var(--morandi-rose);
       border-radius: 50%;
       top: 5px; right: 5px;
     }
@@ -133,23 +151,31 @@
     .legend {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      margin-top: 20px;
-      font-size: 0.8rem;
-      background: rgba(255, 255, 255, 0.4);
-      padding: 10px 20px;
-      border-radius: 20px;
+      gap: 15px;
+      margin-top: 25px;
+      font-size: 0.75rem;
+      color: #777;
     }
-    .legend-item { display: flex; align-items: center; gap: 8px; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
 
     .back-btn {
-      margin: 40px 0;
+      margin-top: 30px;
+      margin-bottom: 50px;
       font-family: 'Cinzel', serif;
       padding: 10px 30px;
       background: transparent;
-      border: 1px solid var(--dark-text);
+      border: 1px solid #999;
+      color: #777;
+      letter-spacing: 2px;
       cursor: pointer;
+      transition: 0.4s;
+    }
+
+    .back-btn:hover {
+      border-color: var(--dark-text);
+      color: var(--dark-text);
     }
   </style>
 </head>
@@ -171,9 +197,9 @@
   <div class="days" id="days"></div>
 
   <div class="legend">
-    <div class="legend-item"><div class="dot" style="background: #ff4b8b;"></div> 生理期</div>
-    <div class="legend-item"><div class="dot" style="background: var(--gold);"></div> 瑜瑜生日</div>
-    <div class="legend-item"><div class="dot" style="background: var(--rose-gold);"></div> 今天</div>
+    <div class="legend-item"><div class="dot" style="background: var(--morandi-sage);"></div> 生理期</div>
+    <div class="legend-item"><div class="dot" style="background: var(--morandi-rose);"></div> 生日</div>
+    <div class="legend-item"><div class="dot" style="background: var(--morandi-blue);"></div> 今天</div>
   </div>
 </div>
 
@@ -200,7 +226,7 @@
 
   function getPeriods(year) {
     const periods = [];
-    const lastStart = new Date(2025, 11, 4); 
+    const lastStart = new Date(2025, 11, 4); // Dec 4
     const cycle = 28;
     const duration = 5; 
     let start = new Date(lastStart);
@@ -249,7 +275,7 @@
 
       dayDiv.onclick = () => {
         let marks = [];
-        if (dayDiv.classList.contains("birthday")) marks.push("瑜瑜的农历生日 🎂");
+        if (dayDiv.classList.contains("birthday")) marks.push("瑜瑜的生日 (农历12.02)");
         if (dayDiv.classList.contains("period")) marks.push("生理期 💗");
         if (marks.length > 0) alert(marks.join('\n'));
       };
