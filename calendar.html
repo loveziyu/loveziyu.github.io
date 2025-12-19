@@ -3,93 +3,221 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>瑜瑜的日历</title>
+  <title>致瑜瑜 - 专属日历</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+SC:wght@300;500&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0; padding: 0; font-family: "Microsoft YaHei", sans-serif;
-      background: linear-gradient(135deg, #ffe6f0, #fff0f5); text-align: center;
-    }
-    h1 { margin-top: 30px; color: #ff4b8b; font-size: 2rem; text-shadow: 1px 1px 3px rgba(255,75,139,0.5); }
-    .calendar {
-      width: 90%; max-width: 500px; margin: 20px auto; background: #fff0f5;
-      border-radius: 15px; box-shadow: 0 5px 15px rgba(255,105,180,0.4); padding: 20px;
-    }
-    .month-year { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-    .month-year button {
-      background: #ff4b8b; color: white; border: none; padding: 8px 14px;
-      border-radius: 10px; cursor: pointer; font-size: 18px; transition: all 0.2s;
-    }
-    .month-year button:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(255,105,180,0.5); }
-    .month-year span { font-size: 1.5rem; font-weight: bold; color: #ff4b8b; }
-    .weekdays, .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-    .weekdays div { font-weight: bold; color: #ff4b8b; padding: 8px 0; }
-    .days { grid-auto-rows: 52px; }
-    .days div {
-      background: #ffe6f0; border-radius: 10px; cursor: pointer; transition: all 0.2s;
-      position: relative; display: flex; align-items: center; justify-content: center;
-      font-weight: bold; min-height: 44px; font-size: 1rem;
-    }
-    .days div:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(255,105,180,0.4); }
-    .days .today { background: #ff4b8b !important; color: white; transform: scale(1.1); z-index: 1; }
-    .days .birthday::before {
-      content: "生日 🎂"; position: absolute; top: 2px; right: 4px;
-      font-size: 10px; color: #fff; background: #ff69b4; padding: 1px 4px; border-radius: 6px;
-    }
-    .days .period::before {
-      content: "生理期 💗"; position: absolute; top: 2px; right: 4px;
-      font-size: 10px; color: #fff; background: #ff1493; padding: 1px 4px; border-radius: 6px;
-    }
-    .days .empty { background: transparent; cursor: default; }
-    .days .empty:hover { transform: none; box-shadow: none; }
-    .footer { margin-top: 30px; font-size: 0.8rem; color: #ff69b4; }
-    
-    /* Home Return Button */
-    .back-button {
-      margin-top: 25px;
-      padding: 12px 25px;
-      background-color: #ff4b8b;
-      color: white;
-      font-size: 18px;
-      border: none;
-      border-radius: 15px;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+    :root {
+      --rose-gold: #b76e79;
+      --dark-text: #4a4a4a;
+      --bg-gradient: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+      --glass: rgba(255, 255, 255, 0.6);
     }
 
-    .back-button:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Noto Serif SC', serif;
+      background: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--dark-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-top: 50px;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 5px;
+      color: var(--rose-gold);
+      font-size: 2.2rem;
+      text-transform: uppercase;
+    }
+
+    /* Elegant Calendar Container */
+    .calendar-card {
+      width: 90%;
+      max-width: 450px;
+      margin: 30px auto;
+      background: var(--glass);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      padding: 30px;
+      animation: fadeIn 1s ease-out;
+    }
+
+    .month-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .month-header span {
+      font-family: 'Cinzel', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--rose-gold);
+      letter-spacing: 2px;
+    }
+
+    .btn-nav {
+      background: none;
+      border: 1px solid var(--rose-gold);
+      color: var(--rose-gold);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .btn-nav:hover {
+      background: var(--rose-gold);
+      color: white;
+      transform: scale(1.1);
+    }
+
+    /* Grid Styling */
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      margin-bottom: 10px;
+    }
+
+    .weekdays div {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .days div {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 0.95rem;
+      font-weight: 300;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .days div:hover:not(.empty) {
+      background: rgba(183, 110, 121, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* Status Indicators */
+    .days .today {
+      background: var(--rose-gold) !important;
+      color: white !important;
+      font-weight: 600;
+      box-shadow: 0 10px 20px rgba(183, 110, 121, 0.3);
+    }
+
+    .days .birthday::after {
+      content: '•';
+      position: absolute;
+      bottom: 5px;
+      color: #d4af37; /* Gold color */
+      font-size: 20px;
+    }
+
+    .days .period {
+      border: 1px solid var(--rose-gold);
+      background: rgba(183, 110, 121, 0.05);
+    }
+
+    .days .period::before {
+      content: "";
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #ff4b8b;
+      border-radius: 50%;
+      top: 8px;
+      right: 8px;
+    }
+
+    .empty { cursor: default !important; }
+
+    /* Back Button Luxury Style */
+    .back-container {
+      margin-top: 20px;
+      margin-bottom: 50px;
+    }
+
+    .back-btn {
+      text-decoration: none;
+      font-family: 'Cinzel', serif;
+      font-size: 0.8rem;
+      color: var(--dark-text);
+      letter-spacing: 3px;
+      padding: 12px 30px;
+      border: 1px solid var(--dark-text);
+      border-radius: 0; /* Square edges for luxury feel */
+      transition: all 0.4s;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      background: var(--dark-text);
+      color: white;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-<h1>瑜瑜的日历 📅</h1>
-<div class="calendar">
-  <div class="month-year">
-    <button id="prevMonth">⬅ 上一月</button>
+
+<h1>The Calendar</h1>
+
+<div class="calendar-card">
+  <div class="month-header">
+    <button class="btn-nav" id="prevMonth">‹</button>
     <span id="monthYear"></span>
-    <button id="nextMonth">下一月 ➡</button>
+    <button class="btn-nav" id="nextMonth">›</button>
   </div>
   <div class="weekdays">
-    <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
+    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
   </div>
   <div class="days" id="days"></div>
 </div>
-<button class="back-button" onclick="goHome()">🏠 返回主页</button>
+
+<div class="back-container">
+  <button class="back-btn" onclick="goHome()">RETURN HOME</button>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.3.0/lunar.min.js"></script>
 <script>
-  // ==========================================
-  // Change: Use new Date() for current real time
-  // ==========================================
-  const TODAY = new Date(); 
+  const TODAY = new Date();
+  let currentMonth = TODAY.getMonth();
+  let currentYear = TODAY.getFullYear();
 
-  // 获取 Yuyu 农历生日（12月初二）在指定阳历年份的阳历日期
   function getBirthdayInYear(year) {
     let lunar, solar;
     const lunarYearsToTry = [year, year + 1, year - 1];
-
     for (let lunarYear of lunarYearsToTry) {
       try {
         lunar = Lunar.fromYmd(lunarYear, 12, 2);
@@ -102,16 +230,15 @@
     return null;
   }
 
-  // 姨妈预测：从 2025-11-06 开始
   function getPeriods(year) {
     const periods = [];
-    const lastStart = new Date(2025, 10, 6);
+    const lastStart = new Date(2025, 11, 18); // Updated to Dec 18 per your last request
     const cycle = 28;
     const duration = 5;
     let start = new Date(lastStart);
-    
-    // Safety check: ensure we loop far enough if year > 2025
-    while (start.getFullYear() <= year + 1) {
+    start.setFullYear(year - 1); // Start calculating from previous year
+
+    while (start.getFullYear() <= year) {
       for (let i = 0; i < duration; i++) {
         const d = new Date(start);
         d.setDate(d.getDate() + i);
@@ -122,12 +249,7 @@
     return periods;
   }
 
-  const monthNames = ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
-  
-  // Initialize calendar with TODAY's real month/year
-  let currentMonth = TODAY.getMonth();
-  let currentYear = TODAY.getFullYear();
-
+  const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
   const monthYearEl = document.getElementById("monthYear");
   const daysContainer = document.getElementById("days");
 
@@ -137,32 +259,26 @@
 
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-
     const birthday = getBirthdayInYear(year);
     const periods = getPeriods(year);
 
-    // 空白格子
     for (let i = 0; i < firstDay; i++) {
       const empty = document.createElement("div");
       empty.classList.add("empty");
       daysContainer.appendChild(empty);
     }
 
-    // 日期
     for (let d = 1; d <= daysInMonth; d++) {
       const dayDiv = document.createElement("div");
       dayDiv.textContent = d;
       const dateObj = new Date(year, month, d);
 
-      // Compare using toDateString to ignore time differences
       if (dateObj.toDateString() === TODAY.toDateString()) {
         dayDiv.classList.add("today");
       }
-
       if (birthday && d === birthday.day && month === birthday.month) {
         dayDiv.classList.add("birthday");
       }
-
       periods.forEach(p => {
         if (p.getFullYear() === year && p.getMonth() === month && p.getDate() === d) {
           dayDiv.classList.add("period");
@@ -170,11 +286,10 @@
       });
 
       dayDiv.onclick = () => {
-        const marks = [];
-        if (dayDiv.classList.contains("birthday")) marks.push("Yuyu 生日 🎂");
-        if (dayDiv.classList.contains("period")) marks.push("生理期 💗");
-        if (dayDiv.classList.contains("today")) marks.push("今天");
-        alert(`${year}年${month + 1}月${d}日${marks.length ? "\n" + marks.join(" · ") : ""}`);
+        let msg = `${year}年${month + 1}月${d}日`;
+        if (dayDiv.classList.contains("birthday")) msg += "\n✨ 瑜瑜的农历生日 (12.02)";
+        if (dayDiv.classList.contains("period")) msg += "\n💗 特别关爱周期";
+        alert(msg);
       };
 
       daysContainer.appendChild(dayDiv);
@@ -182,12 +297,12 @@
   }
 
   document.getElementById("prevMonth").onclick = () => {
-    currentMonth--; 
+    currentMonth--;
     if (currentMonth < 0) { currentMonth = 11; currentYear--; }
     renderCalendar(currentMonth, currentYear);
   };
   document.getElementById("nextMonth").onclick = () => {
-    currentMonth++; 
+    currentMonth++;
     if (currentMonth > 11) { currentMonth = 0; currentYear++; }
     renderCalendar(currentMonth, currentYear);
   };
