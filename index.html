@@ -132,6 +132,39 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* Add to your existing <style> */
+
+.milestone-text {
+    font-size: 0.9rem;
+    color: var(--m-dark);
+    margin-top: 5px;
+    opacity: 0.8;
+    font-family: 'Noto Serif SC', serif;
+}
+
+.quote-container {
+    position: relative;
+}
+
+.refresh-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 5px 15px;
+    font-size: 0.8rem;
+    border: 1px solid var(--m-sage);
+    border-radius: 20px;
+    color: var(--m-dark);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Noto Serif SC', serif;
+}
+
+.refresh-btn:hover {
+    background: var(--m-sage);
+    color: white;
+}
     </style>
 </head>
 <body>
@@ -139,7 +172,8 @@
 <header>
     <h1>瑜瑜</h1>
     <div class="timer-container">
-        每一秒都在爱你：<span id="timeTogether"></span>
+        <div>每一秒都在爱你：<span id="timeTogether"></span></div>
+        <div class="milestone-text" id="nextMilestone"></div>
     </div>
 </header>
 
@@ -147,10 +181,10 @@
     <img src="WhatsApp Image 2025-12-19 at 17.06.50.jpeg" alt="Memory">
 </div>
 
-<div class="message">
-    “山河远阔，人间星河，无一是你，无一不是你。”<br>
-    遇见你，是生命中最优雅的意外。<br>
-    我愿在时光的流逝中，为你守候一份永恒的宁静与温柔。
+<div class="message quote-container">
+    <span id="loveQuote">“山河远阔，人间星河，无一是你，无一不是你。”</span>
+    <br>
+    <button class="refresh-btn" onclick="randomQuote()">♡ 再读一句</button>
 </div>
 
 <div class="link-grid">
@@ -162,7 +196,9 @@
 </div>
 
 <script>
+    /* --- Feature 1: Time Together & Next Milestone --- */
     function updateTime() {
+        // 1. Time Together (Past)
         const startDate = new Date("2025-06-05T00:00:00");
         const now = new Date();
         const diff = now - startDate;
@@ -173,8 +209,54 @@
         const seconds = Math.floor((diff / 1000) % 60);
 
         document.getElementById("timeTogether").innerText = 
-            `${days}D ${hours}H ${minutes}M ${seconds}S`;
+            `${days}天 ${hours}小时 ${minutes}分 ${seconds}秒`;
+
+        // 2. Next Milestone (Future) - Calculates next June 5th
+        let currentYear = now.getFullYear();
+        // Note: Months are 0-indexed in JS (0 = Jan, 5 = June)
+        let nextAnniversary = new Date(currentYear, 5, 5); 
+
+        // If this year's date has passed, calculate for next year
+        if (now > nextAnniversary) {
+            nextAnniversary.setFullYear(currentYear + 1);
+        }
+
+        const diffFuture = nextAnniversary - now;
+        const fDays = Math.floor(diffFuture / (1000 * 60 * 60 * 24));
+        
+        document.getElementById("nextMilestone").innerText = 
+            `(距离一周年纪念日还有：${fDays}天)`;
     }
+
+    /* --- Feature 2: Random Love Quotes --- */
+    const loveQuotes = [
+        "“山河远阔，人间星河，无一是你，无一不是你。”",
+        "“遇见你，是生命中最优雅的意外。”",
+        "“我愿在时光的流逝中，为你守候一份永恒的宁静与温柔。”",
+        "“醒来觉得甚是爱你。”",
+        "“以前觉得星河万里，现在觉得你是人间理想。”",
+        "“喜欢是乍见之欢，爱是久处不厌。”",
+        "“由于你的出现，我的生活从此有了色彩。”",
+        "“不是因为我也刚好在这里，而是因为你在这里。”",
+        "“在所有物是人非的景色里，我最喜欢你。”",
+        "“你是我这一生等了半世未拆的礼物。”"
+    ];
+
+    function randomQuote() {
+        const quoteElement = document.getElementById("loveQuote");
+        // Fade out effect
+        quoteElement.style.opacity = 0;
+        
+        setTimeout(() => {
+            const randomIndex = Math.floor(Math.random() * loveQuotes.length);
+            quoteElement.innerText = loveQuotes[randomIndex];
+            // Fade in effect
+            quoteElement.style.transition = "opacity 1s";
+            quoteElement.style.opacity = 1;
+        }, 300);
+    }
+
+    // Initialize
     setInterval(updateTime, 1000);
     updateTime();
 </script>
