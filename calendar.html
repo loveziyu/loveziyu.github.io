@@ -42,25 +42,25 @@
     .days .empty { background: transparent; cursor: default; }
     .days .empty:hover { transform: none; box-shadow: none; }
     .footer { margin-top: 30px; font-size: 0.8rem; color: #ff69b4; }
+    
     /* Home Return Button */
-.back-button {
-    margin-top: 25px;
-    padding: 12px 25px;
-    background-color: #ff4b8b;
-    color: white;
-    font-size: 18px;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
-}
+    .back-button {
+      margin-top: 25px;
+      padding: 12px 25px;
+      background-color: #ff4b8b;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+    }
 
-.back-button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
-}
-
+    .back-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
+    }
   </style>
 </head>
 <body>
@@ -78,42 +78,39 @@
 </div>
 <button class="back-button" onclick="goHome()">🏠 返回主页</button>
 
-
-<!-- 农历库 -->
 <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.3.0/lunar.min.js"></script>
 <script>
-  // 今天：2025年11月15日
-  const TODAY = new Date(2025, 10, 15);
+  // ==========================================
+  // Change: Use new Date() for current real time
+  // ==========================================
+  const TODAY = new Date(); 
 
-  // 获取 Yuyu 农历生日（12月初二）在指定阳历年份的阳历日期（支持跨年 + 加一年份逻辑）
+  // 获取 Yuyu 农历生日（12月初二）在指定阳历年份的阳历日期
   function getBirthdayInYear(year) {
     let lunar, solar;
-
-    // 尝试多个农历年：当前年 + 加一（覆盖跨年偏移）
     const lunarYearsToTry = [year, year + 1, year - 1];
 
     for (let lunarYear of lunarYearsToTry) {
       try {
         lunar = Lunar.fromYmd(lunarYear, 12, 2);
         solar = lunar.getSolar();
-        if (solar.getYear() === year) {  // 只取落在本阳历年的日期
+        if (solar.getYear() === year) {
           return { month: solar.getMonth() - 1, day: solar.getDay() };
         }
-      } catch (e) {
-        // 忽略无效年份
-      }
+      } catch (e) {}
     }
-
-    return null;  // 如果都失败，返回 null
+    return null;
   }
 
-  // 姨妈预测：从 2025-11-06 开始，28天周期，5天
+  // 姨妈预测：从 2025-11-06 开始
   function getPeriods(year) {
     const periods = [];
     const lastStart = new Date(2025, 10, 6);
     const cycle = 28;
     const duration = 5;
     let start = new Date(lastStart);
+    
+    // Safety check: ensure we loop far enough if year > 2025
     while (start.getFullYear() <= year + 1) {
       for (let i = 0; i < duration; i++) {
         const d = new Date(start);
@@ -126,6 +123,8 @@
   }
 
   const monthNames = ["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
+  
+  // Initialize calendar with TODAY's real month/year
   let currentMonth = TODAY.getMonth();
   let currentYear = TODAY.getFullYear();
 
@@ -155,24 +154,21 @@
       dayDiv.textContent = d;
       const dateObj = new Date(year, month, d);
 
-      // 今天
+      // Compare using toDateString to ignore time differences
       if (dateObj.toDateString() === TODAY.toDateString()) {
         dayDiv.classList.add("today");
       }
 
-      // 生日（现在支持年份偏移）
       if (birthday && d === birthday.day && month === birthday.month) {
         dayDiv.classList.add("birthday");
       }
 
-      // 姨妈期
       periods.forEach(p => {
         if (p.getFullYear() === year && p.getMonth() === month && p.getDate() === d) {
           dayDiv.classList.add("period");
         }
       });
 
-      // 点击
       dayDiv.onclick = () => {
         const marks = [];
         if (dayDiv.classList.contains("birthday")) marks.push("Yuyu 生日 🎂");
@@ -185,7 +181,6 @@
     }
   }
 
-  // 按钮
   document.getElementById("prevMonth").onclick = () => {
     currentMonth--; 
     if (currentMonth < 0) { currentMonth = 11; currentYear--; }
@@ -197,12 +192,11 @@
     renderCalendar(currentMonth, currentYear);
   };
 
-  // 启动
   renderCalendar(currentMonth, currentYear);
 
   function goHome() {
     window.location.href = "index.html";
-}
+  }
 </script>
 </body>
 </html>
