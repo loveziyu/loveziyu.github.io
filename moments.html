@@ -4,146 +4,199 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>点点滴滴 ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+SC:wght@300;500&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --m-blue: #9eb1bb;
+            --m-sage: #b4bdb3;
+            --m-rose: #c7a9a4;
+            --m-oat: #e5e1da;
+            --m-dark: #5a5a5a;
+            --glass: rgba(255, 255, 255, 0.45);
+        }
+
         body {
             margin: 0;
             padding: 0;
-            font-family: "Microsoft YaHei", sans-serif;
-            background: linear-gradient(#ffd6e9, #ffe9f3);
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #e5e1da 0%, #d4d0c8 100%);
+            color: var(--m-dark);
             text-align: center;
             overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 60px 20px 30px;
         }
 
         h1 {
-            font-size: 36px;
-            color: #ff4b8b;
-            margin-top: 40px;
-        }
-
-        p {
-            font-size: 20px;
-            color: #ff4b8b;
-            margin: 20px 30px;
-            line-height: 1.8;
-        }
-
-        .moments-list {
-            max-width: 600px;
-            margin: 20px auto;
-            text-align: left;
-        }
-
-        .moments-list div {
-            background-color: #ffe1eb;
-            padding: 15px 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            letter-spacing: 6px;
+            color: var(--m-dark);
+            text-transform: uppercase;
             margin-bottom: 15px;
-            border-radius: 15px;
-            box-shadow: 0 5px 10px rgba(255, 121, 175, 0.3);
-            transition: transform 0.2s;
         }
 
-        .moments-list div:hover {
-            transform: translateY(-3px);
+        .subtitle {
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--m-dark);
+            opacity: 0.8;
+            letter-spacing: 1px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Timeline Styling */
+        .moments-container {
+            position: relative;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        /* Central Vertical Line */
+        .moments-container::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: var(--m-rose);
+            opacity: 0.4;
+        }
+
+        .moment-item {
+            position: relative;
+            margin-bottom: 40px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeInUp 1s ease forwards;
+            opacity: 0;
+        }
+
+        .moment-content {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 20px 30px;
+            border-radius: 2px; /* Rectangular for a more high-end feel */
+            border-left: 3px solid var(--m-rose);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+            width: 80%;
+            text-align: left;
+            transition: 0.4s;
+            position: relative;
+        }
+
+        .moment-content:hover {
+            transform: translateX(10px);
+            background: white;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+        }
+
+        /* Dot on the line */
+        .moment-item::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--m-rose);
+            border-radius: 50%;
+            z-index: 2;
         }
 
         .back-button {
-            margin-top: 30px;
-            padding: 12px 25px;
-            background-color: #ff4b8b;
-            color: white;
-            font-size: 18px;
-            border: none;
-            border-radius: 15px;
+            margin: 40px 0 80px;
+            padding: 12px 40px;
+            background: transparent;
+            color: var(--m-dark);
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            border: 1px solid var(--m-dark);
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+            transition: 0.4s;
         }
 
         .back-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
+            background: var(--m-dark);
+            color: white;
         }
 
-        /* Falling petals */
-        .petal {
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Soft Floating Particles */
+        .sparkle {
             position: fixed;
-            top: -10px;
-            width: 15px;
-            height: 15px;
-            background: pink;
+            background: var(--m-rose);
             border-radius: 50%;
-            animation: fall linear infinite;
-            opacity: 0.8;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(120vh) rotate(360deg); }
-        }
-
-        /* Floating hearts */
-        .heart {
-            position: fixed;
-            bottom: -10px;
-            color: #ff4b8b;
-            font-size: 18px;
-            animation: floatUp 5s linear infinite;
+            pointer-events: none;
+            opacity: 0.3;
+            animation: floatUp var(--d) linear infinite;
         }
 
         @keyframes floatUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-120vh) scale(1.8); opacity: 0; }
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <h1>点点滴滴 ✨</h1>
+<header>
+    <h1>The Journal</h1>
+    <div class="subtitle">这些是我们生活中的小瞬间，每一刻都值得珍藏 ❤️</div>
+</header>
 
-    <p>这些是我们生活中的小瞬间，每一刻都值得珍藏 ❤️</p>
-
-    <div class="moments-list">
-        <div>第一次牵手，心跳加速 💓</div>
-        <div>一起吃的第一顿晚餐 🍱</div>
-        <div>雨天共撑一把伞的温暖 ☔</div>
-        <div>深夜聊天到天亮的幸福 🌙</div>
-        <div>第一次一起看电影 🎬</div>
-        <div>你笑起来的样子让我融化 😍</div>
+<div class="moments-container">
+    <div class="moment-item" style="animation-delay: 0.2s;">
+        <div class="moment-content">第一次牵手，心跳加速 💓</div>
     </div>
+    <div class="moment-item" style="animation-delay: 0.4s;">
+        <div class="moment-content">一起吃的第一顿晚餐 🍱</div>
+    </div>
+    <div class="moment-item" style="animation-delay: 0.6s;">
+        <div class="moment-content">雨天共撑一把伞的温暖 ☔</div>
+    </div>
+    <div class="moment-item" style="animation-delay: 0.8s;">
+        <div class="moment-content">深夜聊天到天亮的幸福 🌙</div>
+    </div>
+    <div class="moment-item" style="animation-delay: 1.0s;">
+        <div class="moment-content">第一次一起看电影 🎬</div>
+    </div>
+    <div class="moment-item" style="animation-delay: 1.2s;">
+        <div class="moment-content">你笑起来的样子让我融化 😍</div>
+    </div>
+</div>
 
-    <button class="back-button" onclick="window.location.href='index.html'">🏠 返回主页</button>
+<button class="back-button" onclick="window.location.href='index.html'">RETURN HOME</button>
 
-    <script>
-        // Petal generator
-        function createPetal() {
-            const petal = document.createElement("div");
-            petal.classList.add("petal");
-            document.body.appendChild(petal);
-
-            const size = Math.random() * 12 + 8;
-            petal.style.width = `${size}px`;
-            petal.style.height = `${size}px`;
-            petal.style.left = `${Math.random() * 100}vw`;
-            petal.style.animationDuration = `${Math.random() * 5 + 5}s`;
-
-            setTimeout(() => petal.remove(), 10000);
-        }
-
-        // Heart generator
-        function createHeart() {
-            const heart = document.createElement("div");
-            heart.classList.add("heart");
-            heart.innerHTML = "❤";
-            heart.style.left = `${Math.random() * 100}vw`;
-            heart.style.fontSize = `${Math.random() * 15 + 15}px`;
-            document.body.appendChild(heart);
-
-            setTimeout(() => heart.remove(), 6000);
-        }
-
-        setInterval(createPetal, 300);
-        setInterval(createHeart, 700);
-    </script>
+<script>
+    function createSparkle() {
+        const sparkle = document.createElement("div");
+        sparkle.classList.add("sparkle");
+        const size = Math.random() * 4 + 2;
+        sparkle.style.width = `${size}px`;
+        sparkle.style.height = `${size}px`;
+        sparkle.style.left = `${Math.random() * 100}vw`;
+        sparkle.style.setProperty('--d', `${Math.random() * 8 + 8}s`);
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 15000);
+    }
+    setInterval(createSparkle, 800);
+</script>
 
 </body>
 </html>
