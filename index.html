@@ -1,147 +1,198 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>给我最可爱的瑜瑜</title>
-<style>
-    body {
-        margin: 0;
-        padding: 0;
-        font-family: "Microsoft YaHei", sans-serif;
-        background: linear-gradient(160deg, #ffd6e9, #ffe9f3);
-        text-align: center;
-        overflow-x: hidden;
-    }
-    h1 {
-        font-size: 2.5rem;
-        color: #ff4b8b;
-        margin-top: 40px;
-        text-shadow: 1px 1px 5px rgba(255, 75, 139, 0.5);
-    }
-    .days-box {
-        margin-top: 15px;
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: #ff4b8b;
-        text-shadow: 1px 1px 2px rgba(255, 121, 175, 0.5);
-    }
-    p {
-        font-size: 1rem;
-        color: #ff6fa5;
-        padding: 0 20px;
-        line-height: 1.8;
-        max-width: 600px;
-        margin: 20px auto;
-    }
-    .photo-box {
-        width: 250px;
-        height: 250px;
-        margin: 20px auto;
-        border-radius: 20px;
-        overflow: hidden;
-        border: 4px solid #ff9fc7;
-        box-shadow: 0 5px 20px rgba(255, 121, 175, 0.5);
-        transition: transform 0.3s;
-    }
-    .photo-box:hover {
-        transform: scale(1.05) rotate(2deg);
-    }
-    .photo-box img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>致：瑜瑜 - 永恒的记忆</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+SC:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #d4af37;
+            --rose-gold: #b76e79;
+            --dark-pink: #8b4356;
+            --glass: rgba(255, 255, 255, 0.7);
+        }
 
-    /* Falling petals */
-    .petal {
-        position: fixed;
-        top: -10px;
-        width: 15px;
-        height: 15px;
-        background: pink;
-        border-radius: 50%;
-        animation: fall linear infinite;
-        opacity: 0.8;
-        pointer-events: none;
-    }
-    @keyframes fall {
-        0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
-        100% { transform: translateY(120vh) rotate(360deg); opacity: 0; }
-    }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Serif SC', serif;
+            background: radial-gradient(circle at center, #fff5f8 0%, #ffe4ed 100%);
+            color: #4a4a4a;
+            overflow-x: hidden;
+        }
 
-    /* Floating hearts */
-    .heart {
-        position: fixed;
-        bottom: -10px;
-        color: #ff4b8b;
-        font-size: 18px;
-        animation: floatUp 5s linear infinite;
-        pointer-events: none;
-    }
-    @keyframes floatUp {
-        0% { transform: translateY(0) scale(1); opacity: 1; }
-        100% { transform: translateY(-120vh) scale(1.8); opacity: 0; }
-    }
+        /* Subtle Luxury Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/white-diamond.png');
+            opacity: 0.3;
+            pointer-events: none;
+        }
 
-    /* Link containers */
-    .link-containers {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        margin: 30px 0;
-        gap: 15px;
-    }
-    .container {
-        width: 160px;
-        height: 80px;
-        background: linear-gradient(135deg, #ff85b3, #ffb6c1);
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        color: white;
-        font-weight: bold;
-        cursor: pointer;
-        transition: transform 0.3s, box-shadow 0.3s;
-        box-shadow: 0 5px 20px rgba(255, 105, 180, 0.4);
-    }
-    .container:hover {
-        transform: translateY(-5px) scale(1.05);
-        box-shadow: 0 10px 25px rgba(255, 105, 180, 0.6);
-    }
-</style>
+        header {
+            padding-top: 60px;
+            animation: fadeInDown 1.5s ease;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            letter-spacing: 8px;
+            color: var(--dark-pink);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .timer-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            display: inline-block;
+            padding: 15px 40px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-top: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: var(--rose-gold);
+        }
+
+        #timeTogether {
+            font-weight: 500;
+            color: var(--dark-pink);
+        }
+
+        .photo-frame {
+            position: relative;
+            width: 320px;
+            height: 320px;
+            margin: 50px auto;
+            padding: 15px;
+            background: white;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            transform: rotate(-2deg);
+            transition: 0.5s ease;
+            cursor: pointer;
+        }
+
+        .photo-frame:hover {
+            transform: rotate(0deg) scale(1.02);
+            box-shadow: 0 30px 60px rgba(183, 110, 121, 0.3);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: sepia(20%);
+        }
+
+        .photo-frame::after {
+            content: "YUYU";
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: rgba(139, 67, 86, 0.1);
+        }
+
+        .message {
+            max-width: 700px;
+            margin: 40px auto;
+            line-height: 2.2;
+            font-size: 1.1rem;
+            color: #555;
+            padding: 0 30px;
+            font-style: italic;
+        }
+
+        /* High Class Menu */
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 0 40px;
+        }
+
+        .nav-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: var(--dark-pink);
+            font-weight: 500;
+            letter-spacing: 1px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .nav-card:hover {
+            background: var(--dark-pink);
+            color: white;
+            transform: translateY(-10px);
+            border-bottom: 3px solid var(--gold);
+        }
+
+        /* Subtle Particles */
+        .sparkle {
+            position: fixed;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: twinkle var(--d) linear infinite;
+        }
+
+        @keyframes twinkle {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) scale(1.2); opacity: 0; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
 </head>
 <body>
 
-<h1>亲爱的 瑜瑜 ❤️</h1>
-<div class="days-box">
-    我们已经在一起 <span id="timeTogether"></span> 💞
+<header>
+    <h1>瑜瑜</h1>
+    <div class="timer-container">
+        每一秒都在爱你：<span id="timeTogether"></span>
+    </div>
+</header>
+
+<div class="photo-frame">
+    <img src="1761885492079.jpg" alt="Memory">
 </div>
 
-<div class="photo-box">
-    <img src="1761885492079.jpg" alt="我们的回忆1">
+<div class="message">
+    “山河远阔，人间星河，无一是你，无一不是你。”<br>
+    遇见你，是生命中最优雅的意外。我愿在时光的流逝中，为你守候一份永恒的宁静与温柔。<br>
+    你不仅是我的软肋，更是我在这世间披荆斩棘的盔甲。
 </div>
 
-<p>
-    遇见你，是我人生里最温柔的奇迹。<br>
-    我希望未来的每一天，都能陪在你身边，与你一起经历每一次欢笑和成长。<br><br>
-    我不能承诺完美，但我承诺真心与坚定。<br>
-    希望我的出现，让你的世界多一点安心，多一点快乐。<br><br>
-    ❤️ 瑜瑜，你值得被全世界温柔以待 ❤️
-</p>
-
-<div class="link-containers">
-    <div class="container" onclick="window.location.href='yuyu.html'">📸 瑜瑜的照片</div>
-    <div class="container" onclick="window.location.href='birthday.html'">🎂 生日惊喜</div>
-    <div class="container" onclick="window.location.href='memories.html'">💖 甜蜜回忆</div>
-    <div class="container" onclick="window.location.href='moments.html'">✨ 点点滴滴</div>
-    <div class="container" onclick="window.location.href='calendar.html'">📅 瑜瑜日历</div>
+<div class="link-grid">
+    <a href="yuyu.html" class="nav-card">Private Gallery</a>
+    <a href="birthday.html" class="nav-card">Anniversary</a>
+    <a href="memories.html" class="nav-card">Sweet Journal</a>
+    <a href="moments.html" class="nav-card">Captured Moments</a>
+    <a href="calendar.html" class="nav-card">Love Calendar</a>
 </div>
 
 <script>
-    // Live relationship timer
+    // Timer Logic
     function updateTime() {
         const startDate = new Date("2025-06-05T00:00:00");
         const now = new Date();
@@ -153,37 +204,26 @@
         const seconds = Math.floor((diff / 1000) % 60);
 
         document.getElementById("timeTogether").innerText = 
-            `${days}天 ${hours.toString().padStart(2,'0')}小时 ${minutes.toString().padStart(2,'0')}分钟 ${seconds.toString().padStart(2,'0')}秒`;
+            `${days}D ${hours}H ${minutes}M ${seconds}S`;
     }
     setInterval(updateTime, 1000);
     updateTime();
 
-    // Petal generator
-    function createPetal() {
-        const petal = document.createElement("div");
-        petal.classList.add("petal");
-        const size = Math.random() * 10 + 8;
-        petal.style.width = `${size}px`;
-        petal.style.height = `${size}px`;
-        petal.style.left = `${Math.random() * 100}vw`;
-        petal.style.animationDuration = `${Math.random() * 5 + 5}s`;
-        document.body.appendChild(petal);
-        setTimeout(() => petal.remove(), 10000);
+    // Subtle Sparkle Effect (Luxury version of petals)
+    function createSparkle() {
+        const sparkle = document.createElement("div");
+        sparkle.classList.add("sparkle");
+        const size = Math.random() * 4 + 2;
+        sparkle.style.width = `${size}px`;
+        sparkle.style.height = `${size}px`;
+        sparkle.style.left = `${Math.random() * 100}vw`;
+        sparkle.style.bottom = `-10px`;
+        sparkle.style.setProperty('--d', `${Math.random() * 5 + 5}s`);
+        sparkle.style.opacity = Math.random();
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 8000);
     }
-
-    // Heart generator
-    function createHeart() {
-        const heart = document.createElement("div");
-        heart.classList.add("heart");
-        heart.innerHTML = "❤";
-        heart.style.left = `${Math.random() * 100}vw`;
-        heart.style.fontSize = `${Math.random() * 15 + 15}px`;
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 6000);
-    }
-
-    setInterval(createPetal, 300);
-    setInterval(createHeart, 700);
+    setInterval(createSparkle, 400);
 </script>
 
 </body>
