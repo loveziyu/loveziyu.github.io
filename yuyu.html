@@ -1,149 +1,179 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>瑜瑜的照片 📸</title>
-<style>
-body {
-    margin: 0;
-    padding: 0;
-    font-family: "Microsoft YaHei", sans-serif;
-    background: linear-gradient(#ffd6e9, #ffe9f3);
-    text-align: center;
-    overflow-x: hidden;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瑜瑜的照片 📸</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+SC:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --m-blue: #9eb1bb;
+            --m-sage: #b4bdb3;
+            --m-rose: #c7a9a4;
+            --m-oat: #e5e1da;
+            --m-dark: #5a5a5a;
+            --glass: rgba(255, 255, 255, 0.4);
+        }
 
-h1 {
-    font-size: 36px;
-    color: #ff4b8b;
-    margin-top: 40px;
-}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #e5e1da 0%, #d4d0c8 100%);
+            color: var(--m-dark);
+            text-align: center;
+            overflow-x: hidden;
+        }
 
-/* Gallery Grid */
-.photo-box {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 15px;
-    width: 90%;
-    max-width: 1000px;
-    margin: 30px auto;
-}
+        header {
+            padding: 60px 20px 20px;
+        }
 
-.photo-box img {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
-    border-radius: 15px;
-    border: 3px solid #ff9fc7;
-    box-shadow: 0 5px 15px rgba(255, 121, 175, 0.5);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            letter-spacing: 6px;
+            color: var(--m-dark);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
 
-.photo-box img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 25px rgba(255, 105, 180, 0.7);
-}
+        .subtitle {
+            font-style: italic;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            letter-spacing: 2px;
+        }
 
-/* Back Button */
-.back-button {
-    margin-top: 30px;
-    padding: 12px 25px;
-    background-color: #ff4b8b;
-    color: white;
-    font-size: 18px;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
-}
+        /* High Class Gallery Grid */
+        .photo-box {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            width: 90%;
+            max-width: 1100px;
+            margin: 50px auto;
+            padding-bottom: 50px;
+        }
 
-.back-button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(255, 105, 180, 0.5);
-}
+        /* Polaroid Frame Effect */
+        .photo-card {
+            background: white;
+            padding: 12px 12px 40px 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transition: all 0.5s ease;
+            position: relative;
+        }
 
-/* Falling petals */
-.petal {
-    position: fixed;
-    top: -10px;
-    width: 15px;
-    height: 15px;
-    background: pink;
-    border-radius: 50%;
-    animation: fall linear infinite;
-    opacity: 0.8;
-}
+        /* Randomly tilt some photos for a natural "laid on table" look */
+        .photo-card:nth-child(even) { transform: rotate(1.5deg); }
+        .photo-card:nth-child(odd) { transform: rotate(-1.5deg); }
 
-@keyframes fall {
-    0% { transform: translateY(0) rotate(0deg); }
-    100% { transform: translateY(120vh) rotate(360deg); }
-}
+        .photo-card:hover {
+            transform: rotate(0deg) translateY(-10px) scale(1.03);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
 
-/* Floating hearts */
-.heart {
-    position: fixed;
-    bottom: -10px;
-    color: #ff4b8b;
-    font-size: 18px;
-    animation: floatUp 5s linear infinite;
-}
+        .photo-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            filter: grayscale(10%) sepia(5%); /* High-class vintage feel */
+            transition: filter 0.5s;
+        }
 
-@keyframes floatUp {
-    0% { transform: translateY(0) scale(1); opacity: 1; }
-    100% { transform: translateY(-120vh) scale(1.8); opacity: 0; }
-}
-</style>
+        .photo-card:hover img {
+            filter: grayscale(0%) sepia(0%);
+        }
+
+        .photo-card::after {
+            content: "MOMENTS";
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            color: #ccc;
+        }
+
+        /* Back Button */
+        .back-button {
+            margin: 50px 0 80px;
+            padding: 12px 40px;
+            background: transparent;
+            color: var(--m-dark);
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            border: 1px solid var(--m-dark);
+            cursor: pointer;
+            transition: 0.4s;
+        }
+
+        .back-button:hover {
+            background: var(--m-dark);
+            color: white;
+        }
+
+        /* Luxury Floating Elements */
+        .floating-sparkle {
+            position: fixed;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.5;
+            animation: driftUp var(--d) linear infinite;
+        }
+
+        @keyframes driftUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            50% { opacity: 0.6; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+    </style>
 </head>
 <body>
 
-<h1>瑜瑜的照片 📸</h1>
+<header>
+    <h1>The Gallery</h1>
+    <div class="subtitle">CAPTURED MEMORIES OF YUYU</div>
+</header>
 
 <div class="photo-box">
-    <img src="1761885326952.jpg" alt="瑜瑜照片1">
-    <img src="1761885492079.jpg" alt="瑜瑜照片2">
-    <img src="1761885580077.jpg" alt="瑜瑜照片3">
-    <img src="1761885634304.jpg" alt="瑜瑜照片4">
-    <img src="mmexport1755532277585.jpg" alt="瑜瑜照片5">
-    <img src="mmexport1759643324343.jpg" alt="瑜瑜照片6">
-    <img src="mmexport1759643400112.jpg" alt="瑜瑜照片7">
-    <img src="mmexport1762657315556.jpg" alt="瑜瑜照片8">
-    <img src="mmexport1763200275486.jpg" alt="瑜瑜照片9">
-    <img src="mmexport1763200316221.jpg" alt="瑜瑜照片10">
-    <img src="mmexport1763200346550.jpg" alt="瑜瑜照片11">
-    <img src="mmexport1763200404166.jpg" alt="瑜瑜照片12">
+    <div class="photo-card"><img src="1761885326952.jpg" alt="Memory"></div>
+    <div class="photo-card"><img src="1761885492079.jpg" alt="Memory"></div>
+    <div class="photo-card"><img src="1761885580077.jpg" alt="Memory"></div>
+    <div class="photo-card"><img src="1761885634304.jpg" alt="Memory"></div>
+    <div class="photo-card"><img src="mmexport1755532277585.jpg" alt="Memory"></div>
+    <div class="photo-card"><img src="mmexport1759643324343.jpg" alt="Memory"></div>
+    <div class="photo-card"><img src="mmexport1759643400112.jpg" alt="Memory"></div>
+    <div class="photo-card"><img src="mmexport1762657315556.jpg" alt="Memory"></div>
+    <div class="photo-card"><img src="mmexport1763200275486.jpg" alt="Memory"></div>
+    <div class="photo-card"><img src="mmexport1763200316221.jpg" alt="Memory"></div>
+    <div class="photo-card"><img src="mmexport1763200346550.jpg" alt="Memory"></div>
+    <div class="photo-card"><img src="mmexport1763200404166.jpg" alt="Memory"></div>
 </div>
 
-<button class="back-button" onclick="window.location.href='index.html'">🏠 返回主页</button>
+<button class="back-button" onclick="window.location.href='index.html'">RETURN HOME</button>
 
 <script>
-// Petal generator
-function createPetal() {
-    const petal = document.createElement("div");
-    petal.classList.add("petal");
-    document.body.appendChild(petal);
-    const size = Math.random() * 12 + 8;
-    petal.style.width = `${size}px`;
-    petal.style.height = `${size}px`;
-    petal.style.left = `${Math.random() * 100}vw`;
-    petal.style.animationDuration = `${Math.random() * 5 + 5}s`;
-    setTimeout(() => petal.remove(), 10000);
-}
+    // Create luxury floating dust/sparkles instead of petals
+    function createSparkle() {
+        const sparkle = document.createElement("div");
+        sparkle.classList.add("floating-sparkle");
+        const size = Math.random() * 5 + 2;
+        sparkle.style.width = `${size}px`;
+        sparkle.style.height = `${size}px`;
+        sparkle.style.left = `${Math.random() * 100}vw`;
+        sparkle.style.setProperty('--d', `${Math.random() * 10 + 10}s`);
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 20000);
+    }
 
-// Heart generator
-function createHeart() {
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
-    heart.innerHTML = "❤";
-    heart.style.left = `${Math.random() * 100}vw`;
-    heart.style.fontSize = `${Math.random() * 15 + 15}px`;
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 6000);
-}
-
-setInterval(createPetal, 300);
-setInterval(createHeart, 700);
+    setInterval(createSparkle, 500);
 </script>
 
 </body>
