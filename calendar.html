@@ -36,7 +36,6 @@
       text-transform: uppercase;
     }
 
-    /* Calendar Card */
     .calendar-card {
       width: 90%;
       max-width: 450px;
@@ -71,18 +70,21 @@
       height: 35px;
       border-radius: 50%;
       cursor: pointer;
-      transition: 0.3s;
     }
 
-    .btn-nav:hover { background: var(--rose-gold); color: white; }
-
+    /* --- CENTERED WEEKDAYS --- */
     .weekdays {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       margin-bottom: 10px;
+    }
+
+    .weekdays div {
       font-size: 0.7rem;
       color: #888;
       text-transform: uppercase;
+      text-align: center; /* Centering the text */
+      font-weight: bold;
     }
 
     .days {
@@ -100,19 +102,13 @@
       font-size: 0.9rem;
       cursor: pointer;
       position: relative;
-      transition: 0.3s;
     }
 
-    /* --- Status Colors --- */
-    
-    /* 1. Today: Solid Rose Gold */
     .days .today {
       background: var(--rose-gold) !important;
       color: white !important;
-      box-shadow: 0 5px 15px rgba(183, 110, 121, 0.4);
     }
 
-    /* 2. Birthday: Gold Bottom Dot */
     .days .birthday::after {
       content: '•';
       position: absolute;
@@ -121,10 +117,10 @@
       font-size: 24px;
     }
 
-    /* 3. Period: Soft Pink Halo + Top Pink Dot */
     .days .period {
       background: rgba(244, 207, 223, 0.4);
     }
+
     .days .period::before {
       content: "";
       position: absolute;
@@ -134,7 +130,6 @@
       top: 5px; right: 5px;
     }
 
-    /* Legend / Guide */
     .legend {
       display: flex;
       justify-content: center;
@@ -154,7 +149,6 @@
       padding: 10px 30px;
       background: transparent;
       border: 1px solid var(--dark-text);
-      letter-spacing: 2px;
       cursor: pointer;
     }
   </style>
@@ -206,15 +200,11 @@
 
   function getPeriods(year) {
     const periods = [];
-    // UPDATED: Starting from Dec 4, 2025
     const lastStart = new Date(2025, 11, 4); 
     const cycle = 28;
     const duration = 5; 
-    
     let start = new Date(lastStart);
-    // Backdate calculation to show history
     start.setDate(start.getDate() - (cycle * 10));
-
     while (start.getFullYear() <= year + 1) {
       for (let i = 0; i < duration; i++) {
         const d = new Date(start);
@@ -260,7 +250,7 @@
       dayDiv.onclick = () => {
         let marks = [];
         if (dayDiv.classList.contains("birthday")) marks.push("瑜瑜的农历生日 🎂");
-        if (dayDiv.classList.contains("period")) marks.push("生理期：记得喝热水，多休息 💗");
+        if (dayDiv.classList.contains("period")) marks.push("生理期 💗");
         if (marks.length > 0) alert(marks.join('\n'));
       };
       daysContainer.appendChild(dayDiv);
