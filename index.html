@@ -1,301 +1,175 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>致瑜瑜 - 专属日历</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+SC:wght@300;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      /* Morandi Palette */
-      --morandi-blue: #9eb1bb;    /* Dusty Blue */
-      --morandi-sage: #b4bdb3;    /* Muted Sage */
-      --morandi-rose: #c7a9a4;    /* Dusty Rose */
-      --morandi-oat: #e5e1da;     /* Oatmeal Gray */
-      --dark-text: #5a5a5a;
-      --bg-gradient: linear-gradient(135deg, #e5e1da 0%, #d4d0c8 100%);
-      --glass: rgba(255, 255, 255, 0.65);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>致：瑜瑜 - 永恒的记忆</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+SC:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Morandi Theme Colors */
+            --m-blue: #9eb1bb;
+            --m-sage: #b4bdb3;
+            --m-rose: #c7a9a4;
+            --m-oat: #e5e1da;
+            --m-dark: #5a5a5a;
+            --glass: rgba(255, 255, 255, 0.5);
+        }
 
-    body {
-      margin: 0; padding: 0;
-      font-family: 'Noto Serif SC', serif;
-      background: var(--bg-gradient);
-      background-attachment: fixed;
-      color: var(--dark-text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Serif SC', serif;
+            /* Morandi Oatmeal Gradient */
+            background: linear-gradient(135deg, #e5e1da 0%, #d4d0c8 100%);
+            color: var(--m-dark);
+            overflow-x: hidden;
+            text-align: center;
+        }
 
-    h1 {
-      margin-top: 50px;
-      font-family: 'Cinzel', serif;
-      letter-spacing: 5px;
-      color: var(--dark-text);
-      font-size: 2.2rem;
-      text-transform: uppercase;
-      opacity: 0.8;
-    }
+        header {
+            padding-top: 60px;
+            animation: fadeIn 1.5s ease;
+        }
 
-    /* Calendar Card */
-    .calendar-card {
-      width: 90%;
-      max-width: 450px;
-      margin: 20px auto;
-      background: var(--glass);
-      backdrop-filter: blur(15px);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
-      padding: 30px;
-    }
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            letter-spacing: 8px;
+            color: var(--m-dark);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
 
-    .month-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-    }
+        .timer-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            display: inline-block;
+            padding: 15px 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-top: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: var(--m-dark);
+        }
 
-    .month-header span {
-      font-family: 'Cinzel', serif;
-      font-size: 1.3rem;
-      font-weight: 700;
-      color: var(--dark-text);
-      letter-spacing: 2px;
-    }
+        #timeTogether {
+            font-weight: 500;
+            color: var(--m-blue);
+        }
 
-    .btn-nav {
-      background: none;
-      border: 1px solid var(--morandi-blue);
-      color: var(--morandi-blue);
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+        .photo-frame {
+            position: relative;
+            width: 300px;
+            height: 380px;
+            margin: 50px auto;
+            padding: 12px;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: 0.5s ease;
+        }
 
-    .btn-nav:hover {
-      background: var(--morandi-blue);
-      color: white;
-    }
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Morandi filter: desaturated */
+            filter: grayscale(20%) sepia(10%);
+        }
 
-    /* Centered Weekdays */
-    .weekdays {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      margin-bottom: 10px;
-    }
+        .message {
+            max-width: 600px;
+            margin: 40px auto;
+            line-height: 2.2;
+            font-size: 1rem;
+            color: #666;
+            padding: 0 30px;
+            font-style: italic;
+        }
 
-    .weekdays div {
-      font-size: 0.75rem;
-      color: #8a8a8a;
-      text-transform: uppercase;
-      text-align: center; /* PERFECTLY CENTERED */
-      font-weight: 500;
-      letter-spacing: 1px;
-    }
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            max-width: 900px;
+            margin: 60px auto;
+            padding: 0 40px;
+        }
 
-    .days {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 8px;
-    }
+        .nav-card {
+            background: var(--glass);
+            padding: 25px 15px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--m-dark);
+            font-weight: 500;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            font-family: 'Cinzel', serif;
+        }
 
-    .days div {
-      aspect-ratio: 1 / 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      font-size: 0.9rem;
-      cursor: pointer;
-      position: relative;
-      transition: 0.3s;
-    }
+        .nav-card:hover {
+            background: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            color: var(--m-blue);
+        }
 
-    /* --- Morandi Status Colors --- */
-    
-    .days .today {
-      background: var(--morandi-blue) !important;
-      color: white !important;
-    }
-
-    .days .birthday::after {
-      content: '•';
-      position: absolute;
-      bottom: 2px;
-      color: var(--morandi-rose);
-      font-size: 24px;
-    }
-
-    .days .period {
-      background: rgba(180, 189, 179, 0.3); /* Morandi Sage */
-    }
-
-    .days .period::before {
-      content: "";
-      position: absolute;
-      width: 5px; height: 5px;
-      background: var(--morandi-rose);
-      border-radius: 50%;
-      top: 5px; right: 5px;
-    }
-
-    .legend {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 25px;
-      font-size: 0.75rem;
-      color: #777;
-    }
-
-    .legend-item { display: flex; align-items: center; gap: 6px; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; }
-
-    .back-btn {
-      margin-top: 30px;
-      margin-bottom: 50px;
-      font-family: 'Cinzel', serif;
-      padding: 10px 30px;
-      background: transparent;
-      border: 1px solid #999;
-      color: #777;
-      letter-spacing: 2px;
-      cursor: pointer;
-      transition: 0.4s;
-    }
-
-    .back-btn:hover {
-      border-color: var(--dark-text);
-      color: var(--dark-text);
-    }
-  </style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
 
-<h1>The Calendar</h1>
+<header>
+    <h1>瑜瑜</h1>
+    <div class="timer-container">
+        每一秒都在爱你：<span id="timeTogether"></span>
+    </div>
+</header>
 
-<div class="calendar-card">
-  <div class="month-header">
-    <button class="btn-nav" id="prevMonth">‹</button>
-    <span id="monthYear"></span>
-    <button class="btn-nav" id="nextMonth">›</button>
-  </div>
-  
-  <div class="weekdays">
-    <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-  </div>
-  
-  <div class="days" id="days"></div>
-
-  <div class="legend">
-    <div class="legend-item"><div class="dot" style="background: var(--morandi-sage);"></div> 生理期</div>
-    <div class="legend-item"><div class="dot" style="background: var(--morandi-rose);"></div> 生日</div>
-    <div class="legend-item"><div class="dot" style="background: var(--morandi-blue);"></div> 今天</div>
-  </div>
+<div class="photo-frame">
+    <img src="1761885492079.jpg" alt="Memory">
 </div>
 
-<button class="back-btn" onclick="goHome()">RETURN HOME</button>
+<div class="message">
+    “山河远阔，人间星河，无一是你，无一不是你。”<br>
+    遇见你，是生命中最优雅的意外。<br>
+    我愿在时光的流逝中，为你守候一份永恒的宁静与温柔。
+</div>
 
-<script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.3.0/lunar.min.js"></script>
+<div class="link-grid">
+    <a href="yuyu.html" class="nav-card">Private Gallery</a>
+    <a href="birthday.html" class="nav-card">Anniversary</a>
+    <a href="memories.html" class="nav-card">Sweet Journal</a>
+    <a href="moments.html" class="nav-card">Captured Moments</a>
+    <a href="calendar.html" class="nav-card">Love Calendar</a>
+</div>
+
 <script>
-  const TODAY = new Date();
-  let currentMonth = TODAY.getMonth();
-  let currentYear = TODAY.getFullYear();
+    function updateTime() {
+        const startDate = new Date("2025-06-05T00:00:00");
+        const now = new Date();
+        const diff = now - startDate;
 
-  function getBirthdayInYear(year) {
-    let lunar, solar;
-    const lunarYearsToTry = [year, year + 1, year - 1];
-    for (let lunarYear of lunarYearsToTry) {
-      try {
-        lunar = Lunar.fromYmd(lunarYear, 12, 2);
-        solar = lunar.getSolar();
-        if (solar.getYear() === year) return { month: solar.getMonth() - 1, day: solar.getDay() };
-      } catch (e) {}
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        document.getElementById("timeTogether").innerText = 
+            `${days}D ${hours}H ${minutes}M ${seconds}S`;
     }
-    return null;
-  }
-
-  function getPeriods(year) {
-    const periods = [];
-    const lastStart = new Date(2025, 11, 4); // Dec 4
-    const cycle = 28;
-    const duration = 5; 
-    let start = new Date(lastStart);
-    start.setDate(start.getDate() - (cycle * 10));
-    while (start.getFullYear() <= year + 1) {
-      for (let i = 0; i < duration; i++) {
-        const d = new Date(start);
-        d.setDate(d.getDate() + i);
-        if (d.getFullYear() === year) periods.push(new Date(d));
-      }
-      start.setDate(start.getDate() + cycle);
-    }
-    return periods;
-  }
-
-  const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-  const monthYearEl = document.getElementById("monthYear");
-  const daysContainer = document.getElementById("days");
-
-  function renderCalendar(month, year) {
-    monthYearEl.textContent = `${monthNames[month]} ${year}`;
-    daysContainer.innerHTML = "";
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const birthday = getBirthdayInYear(year);
-    const periods = getPeriods(year);
-
-    for (let i = 0; i < firstDay; i++) {
-      const empty = document.createElement("div");
-      daysContainer.appendChild(empty);
-    }
-
-    for (let d = 1; d <= daysInMonth; d++) {
-      const dayDiv = document.createElement("div");
-      dayDiv.textContent = d;
-      const dateObj = new Date(year, month, d);
-
-      if (dateObj.toDateString() === TODAY.toDateString()) dayDiv.classList.add("today");
-      if (birthday && d === birthday.day && month === birthday.month) dayDiv.classList.add("birthday");
-      
-      periods.forEach(p => {
-        if (p.getFullYear() === year && p.getMonth() === month && p.getDate() === d) {
-          dayDiv.classList.add("period");
-        }
-      });
-
-      dayDiv.onclick = () => {
-        let marks = [];
-        if (dayDiv.classList.contains("birthday")) marks.push("瑜瑜的生日 (农历12.02)");
-        if (dayDiv.classList.contains("period")) marks.push("生理期 💗");
-        if (marks.length > 0) alert(marks.join('\n'));
-      };
-      daysContainer.appendChild(dayDiv);
-    }
-  }
-
-  document.getElementById("prevMonth").onclick = () => {
-    currentMonth--;
-    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-    renderCalendar(currentMonth, currentYear);
-  };
-  document.getElementById("nextMonth").onclick = () => {
-    currentMonth++;
-    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-    renderCalendar(currentMonth, currentYear);
-  };
-
-  renderCalendar(currentMonth, currentYear);
-  function goHome() { window.location.href = "index.html"; }
+    setInterval(updateTime, 1000);
+    updateTime();
 </script>
+
 </body>
 </html>
