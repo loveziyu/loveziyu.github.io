@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>致：瑜瑜 - 永恒的记忆</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+SC:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Morandi Theme Colors */
+            --m-blue: #9eb1bb;
+            --m-sage: #b4bdb3;
+            --m-rose: #c7a9a4;
+            --m-oat: #e5e1da;
+            --m-dark: #5a5a5a;
+            --glass: rgba(255, 255, 255, 0.5);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #e5e1da 0%, #d4d0c8 100%);
+            color: var(--m-dark);
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        header {
+            padding-top: 60px;
+            animation: fadeIn 1.5s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            letter-spacing: 8px;
+            color: var(--m-dark);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .timer-container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            display: inline-block;
+            padding: 15px 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-top: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: var(--m-dark);
+        }
+
+        #timeTogether {
+            font-weight: 500;
+            color: var(--m-blue);
+        }
+
+        .photo-frame {
+            position: relative;
+            width: 300px;
+            height: 380px;
+            margin: 50px auto;
+            padding: 12px;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: 0.5s ease;
+            z-index: 10;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%) sepia(10%);
+        }
+
+        .message {
+            position: relative;
+            max-width: 600px;
+            margin: 40px auto;
+            line-height: 2.2;
+            font-size: 1rem;
+            color: #666;
+            padding: 0 30px;
+            font-style: italic;
+            z-index: 10;
+        }
+
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); 
+            gap: 15px;
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .link-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        .nav-card {
+            background: var(--glass);
+            padding: 25px 15px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: var(--m-dark);
+            font-weight: 500;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.4s ease;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            font-family: 'Cinzel', serif;
+        }
+
+        .nav-card:hover {
+            background: #fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            color: var(--m-blue);
+        }
+
+        .milestone-text {
+            font-size: 0.9rem;
+            color: var(--m-dark);
+            margin-top: 5px;
+            opacity: 0.8;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .refresh-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            border: 1px solid var(--m-sage);
+            border-radius: 20px;
+            color: var(--m-dark);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .refresh-btn:hover {
+            background: var(--m-sage);
+            color: white;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- New Year Features Styles --- */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5; /* Behind text but visible */
+            display: none; /* Hidden by default */
+        }
+
+        #countdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(229, 225, 218, 0.95); /* Morandi background */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            display: none; /* Hidden by default */
+            animation: fadeIn 1s ease;
+        }
+
+        .countdown-title {
+            font-size: 1.5rem;
+            color: var(--m-dark);
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .big-countdown {
+            font-size: 5rem;
+            font-family: 'Cinzel', serif;
+            color: var(--m-blue);
+            font-weight: bold;
+        }
+
+        .new-year-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            text-align: center;
+            z-index: 101;
+            display: none; /* Hidden by default */
+            pointer-events: none;
+        }
+
+        .ny-text-main {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            color: #d4a5a5; /* Reddish/Rose for celebration */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: scaleUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .ny-text-sub {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.5rem;
+            color: var(--m-dark);
+            margin-top: 15px;
+            letter-spacing: 5px;
+        }
+
+        @keyframes scaleUp {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="canvas-container">
+        <canvas id="fireworksCanvas"></canvas>
+    </div>
+
+    <div id="countdown-overlay">
+        <div class="countdown-title">距离 2026 年还有</div>
+        <div class="big-countdown" id="nyCountdown">00:00</div>
+        <div class="milestone-text">瑜瑜，准备好许愿了吗？</div>
+    </div>
+
+    <div id="newYearMessage" class="new-year-message">
+        <div class="ny-text-main">Happy 2026</div>
+        <div class="ny-text-sub">瑜瑜，新年快乐 · 永远爱你</div>
+    </div>
+
+    <header>
+        <h1>瑜瑜</h1>
+        <div class="timer-container">
+            <div>每一秒都在爱你：<span id="timeTogether"></span></div>
+            <div class="milestone-text" id="nextMilestone"></div>
+        </div>
+    </header>
+
+    <div class="photo-frame">
+        <img src="WhatsApp Image 2025-12-19 at 17.06.50.jpeg" alt="Memory">
+    </div>
+
+    <div class="message quote-container">
+        <span id="loveQuote">“山河远阔，人间星河，无一是你，无一不是你。”</span>
+        <br>
+        <button class="refresh-btn" onclick="randomQuote()">♡ 再读一句</button>
+    </div>
+
+    <div class="link-grid">
+        <a href="yuyu.html" class="nav-card">Private Gallery</a>
+        <a href="birthday.html" class="nav-card">Anniversary</a>
+        <a href="memories.html" class="nav-card">Sweet Journal</a>
+        <a href="moments.html" class="nav-card">Captured Moments</a>
+        <a href="calendar.html" class="nav-card">Love Calendar</a>
+    </div>
+
+<script>
+    /* --- Feature 1: Time Together & Next Milestone --- */
+    function updateTime() {
+        const startDate = new Date("2025-06-05T00:00:00");
+        const now = new Date();
+        const diff = now - startDate;
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        document.getElementById("timeTogether").innerText = 
+            `${days}天 ${hours}小时 ${minutes}分 ${seconds}秒`;
+
+        let currentYear = now.getFullYear();
+        let nextAnniversary = new Date(currentYear, 5, 5); 
+
+        if (now > nextAnniversary) {
+            nextAnniversary.setFullYear(currentYear + 1);
+        }
+
+        const diffFuture = nextAnniversary - now;
+        const fDays = Math.floor(diffFuture / (1000 * 60 * 60 * 24));
+        
+        document.getElementById("nextMilestone").innerText = 
+            `(距离一周年纪念日还有：${fDays}天)`;
+
+        // --- NEW YEAR TRIGGER CHECK ---
+        checkNewYearEvent(now);
+    }
+
+    /* --- Feature 2: Random Love Quotes --- */
+    const loveQuotes = [
+        "“山河远阔，人间星河，无一是你，无一不是你。”",
+        "“遇见你，是生命中最优雅的意外。”",
+        "“我愿在时光的流逝中，为你守候一份永恒的宁静与温柔。”",
+        "“醒来觉得甚是爱你。”",
+        "“以前觉得星河万里，现在觉得你是人间理想。”",
+        "“喜欢是乍见之欢，爱是久处不厌。”",
+        "“由于你的出现，我的生活从此有了色彩。”",
+        "“不是因为我也刚好在这里，而是因为你在这里。”",
+        "“在所有物是人非的景色里，我最喜欢你。”",
+        "“你是我这一生等了半世未拆的礼物。”"
+    ];
+
+    function randomQuote() {
+        const quoteElement = document.getElementById("loveQuote");
+        quoteElement.style.opacity = 0;
+        
+        setTimeout(() => {
+            const randomIndex = Math.floor(Math.random() * loveQuotes.length);
+            quoteElement.innerText = loveQuotes[randomIndex];
+            quoteElement.style.transition = "opacity 1s";
+            quoteElement.style.opacity = 1;
+        }, 300);
+    }
+
+    /* --- Feature 3: New Year Special Logic (2025 Dec 31 -> 2026) --- */
+    
+    // Config: Malaysian Time is automatic if user is in Malaysia
+    const COUNTDOWN_START_TIME = new Date("2025-12-31T23:55:00"); 
+    const NEW_YEAR_TIME = new Date("2026-01-01T00:00:00");
+    
+    let fireworksStarted = false;
+
+    function checkNewYearEvent(now) {
+        const overlay = document.getElementById('countdown-overlay');
+        const nyMessage = document.getElementById('newYearMessage');
+        const countdownText = document.getElementById('nyCountdown');
+        const canvasContainer = document.getElementById('canvas-container');
+
+        // Case 1: After 23:55 but before Midnight (Countdown Mode)
+        if (now >= COUNTDOWN_START_TIME && now < NEW_YEAR_TIME) {
+            overlay.style.display = "flex"; // Show full screen overlay
+            
+            const diff = NEW_YEAR_TIME - now;
+            const m = Math.floor((diff / 1000 / 60) % 60);
+            const s = Math.floor((diff / 1000) % 60);
+            
+            // Pad with zeros
+            const mStr = m < 10 ? "0" + m : m;
+            const sStr = s < 10 ? "0" + s : s;
+            
+            countdownText.innerText = `${mStr}:${sStr}`;
+        }
+        // Case 2: It is officially 2026 (Celebration Mode)
+        else if (now >= NEW_YEAR_TIME) {
+            overlay.style.display = "none"; // Hide countdown
+            nyMessage.style.display = "block"; // Show Message
+            canvasContainer.style.display = "block"; // Show Fireworks layer
+            
+            if (!fireworksStarted) {
+                fireworksStarted = true;
+                startFireworks();
+            }
+        }
+        // Case 3: Normal time
+        else {
+            overlay.style.display = "none";
+            nyMessage.style.display = "none";
+            canvasContainer.style.display = "none";
+        }
+    }
+
+    /* --- Simple Fireworks Logic --- */
+    function startFireworks() {
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        const colors = ['#ff9a9e', '#fad0c4', '#a18cd1', '#fbc2eb', '#9eb1bb', '#e5e1da'];
+
+        function Particle(x, y) {
+            this.x = x;
+            this.y = y;
+            this.size = Math.random() * 5 + 1;
+            this.speedX = Math.random() * 6 - 3;
+            this.speedY = Math.random() * 6 - 3;
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+            this.life = 100;
+        }
+
+        Particle.prototype.update = function() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            this.life--;
+            this.size = Math.max(0, this.size - 0.1);
+        }
+
+        Particle.prototype.draw = function() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function createExplosion(x, y) {
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        // Auto launch fireworks
+        setInterval(() => {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height * 0.7; // Keep mostly in top part
+            createExplosion(x, y);
+        }, 800);
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+        
+        // Resize listener
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    }
+
+    // Initialize
+    setInterval(updateTime, 1000);
+    updateTime();
+</script>
+
+</body>
+</html>
